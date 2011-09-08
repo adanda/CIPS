@@ -1,0 +1,34 @@
+{% extends 'layout.html.twig' %}
+
+{% block head %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $('document').ready(function() {
+            $('.project_list li').animate({opacity: 1}, 2000);
+        });
+    </script>
+{% endblock %}
+
+{% block content %}
+    <ul class="project_list">
+        <li class="header clear">
+            <div class="project">Project</div>
+            <div class="build">Build</div>
+            <div class="date">Date</div>
+        </li>
+        {% for project in projects %}
+            {% set build = project.getLastBuild(db) %}
+            <a href="/project/{{ project.getSlug }}">
+                <li {% if build.success %} class="green clear invisible" {% else %} class="red clear invisible" {% endif %}>
+                    <div class="project">
+                        {{ project.getName }}
+                    </div>
+                    {% if build %}
+                        <div class="build">#{{ build.build }}</div>
+                        <div class="date">{{ build.build_date|date("d.m.Y H:i:s") }}</div>
+                    {% endif %}
+                </li>
+            </a>
+        {% endfor %}
+    </ul>
+{% endblock %}

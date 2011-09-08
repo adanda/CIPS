@@ -1,0 +1,25 @@
+.project_list .file {
+    padding: 10px;
+    font-size: 1em;
+    background-color: #000000;
+    color: #ffffff;
+    font-weight: none;
+    height: 40px;
+    line-height: 20px;
+}
+
+.project_list .error {
+    background-image: url('/images/background_red_small');
+    background-position: right;
+    background-repeat: no-repeat;
+    margin: 10px 20px;
+    padding:0 10px;
+}
+
+.project_list .warning {
+    background-image: url('/images/background_yellow_small');
+    background-position: right;
+    background-repeat: no-repeat;
+    margin: 10px 20px;
+    padding:0 10px;
+}

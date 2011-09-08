@@ -1,0 +1,53 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}CIPS | {{ project.getName }}{% endblock %}
+
+{% block head %}
+    {{ parent() }}
+    <script type="text/javascript" src="/js/main.js"></script>
+    <script type="text/javascript" src="/js/jqplot/jquery.jqplot.min.js"></script>
+    <script type="text/javascript" src="/js/charts.js"></script>
+    <link rel="stylesheet" type="text/css" href="/js/jqplot/jquery.jqplot.min.css" />
+    <link rel="stylesheet" type="text/css" href="/css/chart.css" />
+    <script type="text/javascript">
+        $('document').ready(function() {
+            printCheckstyleChart('checkstyle_chart_wrapper', {{ project.getCheckstyleData(db, 20) }});
+            $('#checkstyle_chart_wrapper').animate({opacity: 1}, 2000);
+            $('#builds_list li').animate({opacity: 1}, 2000);
+        });
+    </script>
+{% endblock %}
+
+{% block breadcrumb %}
+    <div class="breadcrumb">
+        <img src="/images/arrow_breadcrumb_left.png" /><a class="left" href="/">Projects</a><img src="/images/arrow_breadcrumb_right.png" />
+        <img src="/images/arrow_breadcrumb_left.png" /><a class="left" href="/project/{{ project.getSlug }}">{{ project.getName }}</a><img src="/images/arrow_breadcrumb_right.png" />
+    </div>
+{% endblock %}
+
+{% block content %}
+    <table class="clear chart_table">
+        <tr>
+            {% if has_checkstyle %}
+                <td>
+                    <a href="/checkstyle/{{ project.getSlug }}">
+                        <div id="checkstyle_chart_wrapper" class="chart_wrapper invisible"></div>
+                    </a>
+                </td>
+            {% endif %}
+        </tr>
+    </table>
+
+    <ul id="builds_list" class="project_list">
+        <li class="header">
+            <div class="project">Build</div>
+            <div class="build">&nbsp;</div>
+            <div class="date">Date</div>
+        </li>
+        {% include 'builds.html.twig' with {'builds': project.getBuilds(db, 10)} %}
+    </ul>
+    <a name="listend"></a>
+    <div class="centered_text">
+        <a class="button" href="#listend" onclick="loadBuildResults('{{ project.getslug }}', 10)">show previous builds</a>
+    </div>
+{% endblock %}

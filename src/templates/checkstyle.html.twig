@@ -1,0 +1,55 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}CIPS | {{ project.getName }}{% endblock %}
+
+{% block head %}
+    {{ parent() }}
+    <link rel="stylesheet" href="/css/checkstyle.css" />
+    <script type="text/javascript">
+        $('document').ready(function() {
+            $('.project_list li').animate({opacity: 1}, 2000);
+        });
+    </script>
+{% endblock %}
+
+{% block breadcrumb %}
+    <div class="breadcrumb">
+        <img src="/images/arrow_breadcrumb_left.png" /><a class="left" href="/">Projects</a><img src="/images/arrow_breadcrumb_right.png" />
+        <img src="/images/arrow_breadcrumb_left.png" /><a class="left" href="/project/{{ project.getSlug }}">{{ project.getName }}</a><img src="/images/arrow_breadcrumb_right.png" />
+        <img src="/images/arrow_breadcrumb_left.png" /><a class="left" href="/checkstyle/{{ project.getSlug }}">Checkstyle</a><img src="/images/arrow_breadcrumb_right.png" />
+    </div>
+{% endblock %}
+    
+{% block content %}
+    <ul class="project_list">
+        <li class="header">
+            <div class="project">Date</div>
+            <div class="build">Files</div>
+            <div class="date">Errors</div>
+        </li>
+        <li>
+            <div class="project">{{ checkstyle_time }}</div>
+            <div class="build">{{ checkstyle|length }}</div>
+            <div class="date">{{ errors }}</div>
+        </li>
+        {% for file in checkstyle %}
+            {% if file|length > 0 %}
+                {% set file_class = loop.index %}
+                {% set file_attributes = file.attributes %}
+                <a href="##" onclick="jQuery('.{{ file_class }}').slideToggle()">
+                    <li class="file invisible">
+                        {{ file_attributes.name }}
+                        <br/>
+                        <b>Errors:</b> {{ file|length }}
+                    </li>
+                </a>
+                {% for error in file %}
+                    {% set error_attributes = error.attributes %}
+                    <li class="{{ error_attributes.severity }} hidden {{ file_class }}">
+                        <b>Line</b> {{ error_attributes.line }}, <b>Column</b> {{ error_attributes.column }}:  {{ error_attributes.message }}
+                    </li>
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+    </ul>
+{% endblock %}

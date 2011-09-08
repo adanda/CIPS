@@ -1,0 +1,13 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <title>Tests failed</title>
+    </head>
+    <body>
+        <p>The Tests for the Project "{{ name }}" failed.</p>
+        <br/>
+        <div style="background-color:#000000; color:#FFFFFF; font-family:Monospace; font-size:1.2em; padding:15px; white-space:nowrap;">
+            {{ output|replace({'\n':'<br/>'})|raw }}
+        </div>
+    </body>
+</html>

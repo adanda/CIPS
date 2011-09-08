@@ -1,0 +1,12 @@
+# gitignore for the CIPS Project
+#
+# The project configuration /config/projects.php
+# All build-Informations under data/build
+# The DB-file data/cips.db
+# The Netbeans project directory nbproject
+
+/config/projects.php
+/config/config.php
+/data/*.db
+/data/build/*/
+/nbproject

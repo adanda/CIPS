@@ -1,0 +1,23 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <title>
+            {% block title %}
+                CIPS | Continuous Integration PHP Server
+            {% endblock %}
+        </title>
+        {% block head %}
+            <link rel="stylesheet" href="/css/style.css" />
+            <script type="text/javascript" src="/js/jquery.js"></script>
+        {% endblock %}
+    </head>
+    <body>
+        <div id="content">
+            <a href="/">
+                <img id="header_logo" src="/images/header_logo.png" alt="CIPS - Continuous Integration PHP Server" />
+            </a>
+            {% block breadcrumb %}{% endblock %}
+            {% block content %}{% endblock %}
+        </div>
+    </body>
+</html>

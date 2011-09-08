@@ -1,0 +1,74 @@
+CIPS, a Continuous Integration PHP Server
+=========================================
+
+CIPS is a simple continuous integration server written in php mainly for
+php projects. It is based on [Silex][1], a PHP micro framework.
+
+CIPS supports projects hosted in a Subversion or Git repository.
+
+Currently CIPS supports tests which return a non-zero exit code when tests do
+not pass as well as checkstyle results (like PHP Codesniffer).
+
+CIPS works with PHP 5.3.2 or later.
+
+## Installation
+
+To install CIPS simply download the source, configure a vhost for the 
+web-directory and set up your projects under ''config/projects.php''. A
+sample file is available under ''config/projects.php_sample''.
+You have to add a config file under ''config/config.php'' too, a sample is
+available under ''config/config.php_sample''.
+
+## Usage
+
+CIPS runs on the command line. To list all available commands
+go to the root directory of the application and type
+
+'''shell
+./cips
+'''
+
+You can build all your projects with
+
+'''shell
+./cips build
+'''
+
+or pass a project slug to build a single project.
+To continuously build your projects you can either run the task as a cronjob
+or execute it as a hook from your version control system.
+
+### Tests
+
+You can set a test command for each project in ''config/projects.php'' with the
+setTestCommand('') function, for example:
+
+'''php
+$your_project->setTestCommand('phpunit tests/');
+'''
+
+### Checkstyle
+
+You can set a checkstyle task as a post build command in 
+''config/projects.php''.
+Currently CIPS only supports the checkstyle format. The resulting xml-file
+has to be located under 
+''data/buils/your_project_slug/reports/checkstyle.xml''.
+
+You can generate the report like in the following PHP Codesniffer example:
+
+'''php
+$your_project->setPostBuildCommands(array(
+    'phpcs --report=checkstyle --report-file=../reports/checkstyle.xml src/',
+));
+'''
+
+Because the report file in the example is generated with a relative path, there
+is a problem in cause the file does not exist. In this case it will not be
+generated, therefore you have to create it manually before the first build.
+
+## License
+
+CIPS is licensed under the MIT license.
+
+[1]: http://silex-project.org

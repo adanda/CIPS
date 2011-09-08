@@ -1,0 +1,169 @@
+body {
+    background-color: #000000;
+    color: #333333;
+    padding: 0;
+    font-family: Arial;
+}
+
+h1 {
+    padding: 15px;
+}
+
+a, a:hover {
+    color: #333333;
+    text-decoration: none;
+}
+
+.right {
+    float: right;
+}
+
+.left {
+    float: left;
+}
+
+.clear {
+    clear: both;
+}
+
+.centered_text {
+    text-align: center;
+}
+
+.invisible {
+    opacity: 0;
+}
+
+.button {
+    color: #ffffff;
+    font-weight: bold;
+}
+
+#content {
+    width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    background-image: url('/images/background.png');
+}
+
+#header_logo {
+    margin-left: 40px;
+}
+
+.project_list {
+    list-style-type: none;
+    margin: 10px auto 20px auto;
+    width: 900px;
+    padding: 0;
+}
+
+.project_list .header {
+    color: #ffffff;
+    vertical-align: middle;
+    background-image: url('/images/table_header_background.png');
+    border-bottom: none;
+    height: 32px;
+    line-height: 32px;
+    padding-top: 6px;
+    font-size: 1.1em;
+    background-color: inherit;
+}
+
+.project_list li {
+    height: 30px;
+    line-height: 30px;
+    vertical-align: middle;
+    font-size: 1em;
+    font-weight: bold;
+    border-bottom: 1px solid #333333;
+    background-color: #ffffff;
+}
+
+.project_list li img {
+    vertical-align: middle;
+    margin-right: 10px;
+}
+
+.project_list .project {
+    margin-left: 30px;
+    width: 450px;
+    float: left;
+}
+
+.project_list .build {
+    width: 200px;
+    float: left;
+}
+
+.hidden {
+    display: none;
+}
+
+.output {
+    padding: 15px;
+    margin: 0 20px;
+    line-height: 1em !important;
+    font-size: 1em !important;
+    background-color: #000000;
+    color: #ffffff;
+    white-space: nowrap;
+    font-family: Monospace;
+    max-height: 300px;
+    overflow: auto;
+}
+
+.breadcrumb {
+    margin: 0 0 50px 50px;
+    font-size: 1em;
+}
+
+.breadcrumb a {
+    text-decoration: none;
+    color: #ffffff;
+    font-size: 0.9em;
+    font-weight: bold;
+    background-image: url('/images/arrow_breadcrumb_background.png');
+    min-width: 140px;
+    height: 26px;
+    padding:0 5px;
+    line-height: 30px;
+    vertical-align: middle;
+    text-align: center;
+    margin-right: -5px;
+    display: block;
+}
+
+.breadcrumb img {
+    float: left;
+}
+
+.report_link a {
+    text-decoration: none;
+    color: #ffffff;
+}
+
+.chart_table {
+    margin: 20px 0 0 50px;
+}
+
+.chart_wrapper {
+    width: 300px;
+    height: 200px;
+}
+
+.report_link {
+    margin-left: 15px;
+    font-size: 1.2em;
+}
+
+.red {
+    background-image: url('/images/background_red_small');
+    background-position: right;
+    background-repeat: no-repeat;
+}
+
+.green {
+    background-image: url('/images/background_green_small');
+    background-position: right;
+    background-repeat: no-repeat;
+}

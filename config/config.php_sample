@@ -1,0 +1,7 @@
+<?php
+    $config = array();
+
+    // the sender (from) for all mails send from CIPS
+    $config['email_sender'] = 'cips@no-reply.com';
+
+    return $config;

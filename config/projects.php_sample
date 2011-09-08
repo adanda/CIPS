@@ -1,0 +1,43 @@
+<?php
+/**
+ * This is a sample configuration file for CIPS
+ */
+
+    $projects = array();
+
+    // add a Git Project
+    $your_git_project = new Cips\GitProject('Your Project Name');
+    $your_git_project->setRepository('path to your repository');
+    $your_git_project->setPreBuildCommands(array(
+        'your pre-build-command #1',
+        'your pre-build-command #2',
+    ));
+    $your_git_project->setTestCommand('your test command, e.g phpunit');
+    $your_git_project->setPostBuildCommands(array(
+        'your post-build-command #1',
+        'your post-build-command #2',
+        'phpcs --report=checkstyle --report-file=../reports/checkstyle.xml ./',
+    ));
+    $your_git_project->setSlug('your_project_slug');
+    $your_git_project->setNotifier('your notification emails');
+    $projects['your_project_slug'] = $your_git_project;
+
+    // add a SVN Project
+    $your_svn_project = new Cips\SvnProject('Your Project Name');
+    $your_svn_project->setRepository('path to your repository');
+    $your_svn_project->setBranch('your Branch');
+    $your_svn_project->setPreBuildCommands(array(
+        'your pre-build-command #1',
+        'your pre-build-command #2',
+    ));
+    $your_svn_project->setTestCommand('your test command, e.g phpunit');
+    $your_svn_project->setPostBuildCommands(array(
+        'your post-build-command #1',
+        'your post-build-command #2',
+        'phpcs --report=checkstyle --report-file=../reports/checkstyle.xml ./',
+    ));
+    $your_svn_project->setSlug('your_project_slug');
+    $your_svn_project->setNotifier('your notification emails');
+    $projects['your_project_slug'] = $your_svn_project;
+
+    return $projects;
