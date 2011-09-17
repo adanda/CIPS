@@ -184,19 +184,64 @@ EOF
 });
 
 $console->register('db:delete')
-->setDefinition(array())
+->setDefinition(array(
+    new InputArgument('slug', InputArgument::OPTIONAL, 'Project slug')
+))
 ->setDescription('Delete the Database')
 ->setHelp(<<<EOF
 The <info>db:delete</info> command deletes the Database:
 
     <info>./cips db:delete</info>
+    
+Pass the Project slug to delete a specific Project:
+
+    <info>./cips delete your_project_slug</info>
 
 EOF
 )->setCode(function (InputInterface $input, OutputInterface $output) use ($app)
 {
-    $output->write("\n<info>Start deleting Database ...</info>\n");
+    if ($slug = $input->getArgument('slug')) {
+        $projects = require __DIR__.'/../config/projects.php';
 
-    unlink($app['db.path']);
+        if (!array_key_exists($slug, $projects)) {
+            $output->writeln(
+                "\n".sprintf(
+                    '<error>Project "%s" does not exist.</error>'."\n", $slug
+                )
+            );
+
+            return 1;
+        }
+
+        $output->write(
+            "\n".sprintf(
+                '<info>Start deleting Database for project "%s"...</info>', $slug
+            )."\n"
+        );
+
+        // Delete builds
+        $stmt = $app['db']->prepare('DELETE FROM builds WHERE slug = :slug');
+        $stmt->bindValue(':slug', $slug, SQLITE3_TEXT);
+        if (FALSE === $stmt->execute()) {
+            throw new \RuntimeException(
+                sprintf('Unable to delete project "%s".', $this->getName())
+            );
+        }
+
+        // Delete checkstyle
+        $stmt = $app['db']->prepare(
+            'DELETE FROM builds_checkstyle WHERE slug = :slug'
+        );
+        $stmt->bindValue(':slug', $slug, SQLITE3_TEXT);
+        if (FALSE === $stmt->execute()) {
+            throw new \RuntimeException(
+                sprintf('Unable to delete project "%s".', $this->getName())
+            );
+        }
+    } else {
+        $output->write("\n<info>Start deleting Database ...</info>\n");
+        unlink($app['db.path']);
+    }
 
     $output->write("\n<info>Finished deleting Database</info>\n");
 });
