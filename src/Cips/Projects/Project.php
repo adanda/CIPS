@@ -5,13 +5,13 @@
  * PHP Version 5.3
  *
  * @category Project
- * @package  CIPS
+ * @package  CIPS\Projects
  * @author   Alfred Danda <alfred.danda@gmail.com>
  * @license  MIT License
  * @link     Project
  */
 
-namespace Cips;
+namespace Cips\Projects;
 
 use Symfony\Component\Process\Process;
 
@@ -19,7 +19,7 @@ use Symfony\Component\Process\Process;
  * A abstract class that represents a Project that can be build by CIPS
  *
  * @category Project
- * @package  CIPS
+ * @package  CIPS\Projects
  * @author   Alfred Danda <alfred.danda@gmail.com>
  * @license  MIT License
  * @link     Project
@@ -69,8 +69,8 @@ abstract class Project
     private $_testCommand = '';
 
     /**
-     * The Emails to be notified for the Project
-     * @var string
+     * The Notification Class for the Project
+     * @var Notification
      */
     private $_notifier = '';
 
@@ -250,7 +250,7 @@ abstract class Project
     /**
      * Setter for the Notifier
      *
-     * @param string $notifier The Emailadresses for Notifications for the Project
+     * @param Notification $notifier The Notification Class for the Project
      *
      * @return Project The Object itself
      */
@@ -263,7 +263,7 @@ abstract class Project
     /**
      * Getter for the Notifier
      *
-     * @return string The Notifier for the Project
+     * @return Notification The Notification for the Project
      */
     public function getNotifier()
     {
@@ -356,61 +356,28 @@ abstract class Project
     }
 
     /**
-     * Sends Emails with a fail Notification to the Notifier
-     *
-     * @param SwiftMailerExtension $mailer The SwiftMailer Object
-     * @param string               $output The Output of the failing Test
-     * @param TwigExtension        $twig   The Twig Templating Class
-     * @param string               $sender The Sender (from) of the Mails
-     * 
-     * @return SvnProject The Object itself
-     */
-    protected function sendFailNotification($mailer, $output, $twig, $sender)
-    {
-        $mailer->send(
-            \Swift_Message::newInstance()
-            ->setFrom($sender)
-            ->addTo($this->getNotifier())
-            ->setSubject('[CIPS '.$this->getName().'] Tests failed')
-            ->setBody(
-                "One or more Tests of the Project ".$this->getName().
-                " failed:\n\r\n\r".$output, 'Text/PLAIN'
-            )
-            ->setBody(
-                $twig->render(
-                    'mailFailure.html.twig', array(
-                        'name'      => $this->getName(),
-                        'output'    => $output)
-                ), 'Text/HTML'
-            )
-        );
-    }
-
-    /**
      * Function which builds the Project
      *
-     * @param string               $data_path    The path to the root of the
-     *                                           Source Code
-     * @param SQLite3              $db           The SQLite Database Object
-     * @param SwiftMailerExtension $mailer       The SwiftMailer Object
-     * @param TwigExtension        $twig         The Twig Templating Object
-     * @param string               $email_sender The Sender (from) of the Mails
+     * @param Silex\Application $app The application
      *
      * @return Project The Object itself
      */
-    public function build($data_path, $db, $mailer, $twig, $email_sender)
+    public function build($app)
     {
         $success = TRUE;
         $output  = '';
 
         foreach ($this->getPreBuildCommands() as $cmd) {
-            $process = new Process($cmd, $data_path.'/'.$this->getSlug().'/source');
+            $process = new Process(
+                $cmd, $app['build.path'].'/'.$this->getSlug().'/source'
+            );
             $process->run();
         }
 
         if ($this->getTestCommand() != '') {
             $process = new Process(
-                $this->getTestCommand(), $data_path.'/'.$this->getSlug().'/source'
+                $this->getTestCommand(),
+                $app['build.path'].'/'.$this->getSlug().'/source'
             );
             $process->run();
             if (!$process->isSuccessful()) {
@@ -420,22 +387,19 @@ abstract class Project
         }
 
         foreach ($this->getPostBuildCommands() as $cmd) {
-            $process = new Process($cmd, $data_path.'/'.$this->getSlug().'/source');
+            $process = new Process(
+                $cmd, $app['build.path'].'/'.$this->getSlug().'/source'
+            );
             $process->run();
         }
 
         if (!$success) {
-            $this->sendFailNotification(
-                $mailer,
-                $output,
-                $twig,
-                $email_sender
-            );
+            $this->getNotifier()->notify($this, $output, $app);
         }
 
-        $last_build = $this->getLastBuild($db);
+        $last_build = $this->getLastBuild($app['db']);
 
-        $stmt = $db->prepare(
+        $stmt = $app['db']->prepare(
             'INSERT INTO builds (slug, build, success, output, build_date) '.
             'VALUES (:slug, :build, :success, :output, :date)'
         );
@@ -456,16 +420,17 @@ abstract class Project
         }
 
         // check if Checkstyle-Data is available
-        if (is_file($data_path.'/'.$this->getSlug().'/reports/checkstyle.xml')) {
+        if (is_file($app['build.path'].'/'.$this->getSlug().
+        '/reports/checkstyle.xml')) {
             $checkstyle = simplexml_load_file(
-                $data_path.'/'.$this->getSlug().'/reports/checkstyle.xml'
+                $app['build.path'].'/'.$this->getSlug().'/reports/checkstyle.xml'
             );
             $errors = 0;
             foreach ($checkstyle as $file) {
                 $errors += count($file->error);
             }
 
-            $stmt = $db->prepare(
+            $stmt = $app['db']->prepare(
                 'INSERT INTO builds_checkstyle (slug, build, files, errors) '
                 .'VALUES (:slug, :build, :files, :errors)'
             );

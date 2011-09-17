@@ -1,7 +1,7 @@
 <?php
 
-require_once __DIR__.'/../../src/Cips/Project.php';
-require_once __DIR__.'/../../src/Cips/GitProject.php';
+require_once __DIR__.'/../../src/Cips/Projects/Project.php';
+require_once __DIR__.'/../../src/Cips/Projects/GitProject.php';
 require_once __DIR__.'/../stubs/DB.php';
 
 /**

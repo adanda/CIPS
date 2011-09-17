@@ -65,13 +65,7 @@ EOF
             "\n".sprintf('<info>Building Project "%s"</info>', $project->getName())
         );
         $project->checkout($app['build.path'])
-            ->build(
-                $app['build.path'],
-                $app['db'],
-                $app['mailer'],
-                $app['twig'],
-                $config['email_sender']
-            );
+            ->build($app);
         $output->writeln(
             sprintf(
                 '<info>Finished building Project "%s"</info>', $project->getName()

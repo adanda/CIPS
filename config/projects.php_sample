@@ -6,7 +6,7 @@
     $projects = array();
 
     // add a Git Project
-    $your_git_project = new Cips\GitProject('Your Project Name');
+    $your_git_project = new Cips\Projects\GitProject('Your Project Name');
     $your_git_project->setRepository('path to your repository');
     $your_git_project->setPreBuildCommands(array(
         'your pre-build-command #1',
@@ -19,11 +19,11 @@
         'phpcs --report=checkstyle --report-file=../reports/checkstyle.xml ./',
     ));
     $your_git_project->setSlug('your_project_slug');
-    $your_git_project->setNotifier('your notification emails');
+    $your_git_project->setNotifier(new Cips\Notifications\EmailNotification('your notification emails', 'your sender adress'));
     $projects['your_project_slug'] = $your_git_project;
 
     // add a SVN Project
-    $your_svn_project = new Cips\SvnProject('Your Project Name');
+    $your_svn_project = new Cips\Projects\SvnProject('Your Project Name');
     $your_svn_project->setRepository('path to your repository');
     $your_svn_project->setBranch('your Branch');
     $your_svn_project->setPreBuildCommands(array(
@@ -37,7 +37,7 @@
         'phpcs --report=checkstyle --report-file=../reports/checkstyle.xml ./',
     ));
     $your_svn_project->setSlug('your_project_slug');
-    $your_svn_project->setNotifier('your notification emails');
+    $your_svn_project->setNotifier(new Cips\Notifications\EmailNotification('your notification emails', 'your sender adress'));
     $projects['your_project_slug'] = $your_svn_project;
 
     return $projects;

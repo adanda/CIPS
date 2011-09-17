@@ -11,9 +11,11 @@
     <link rel="stylesheet" type="text/css" href="/css/chart.css" />
     <script type="text/javascript">
         $('document').ready(function() {
-            printCheckstyleChart('checkstyle_chart_wrapper', {{ project.getCheckstyleData(db, 20) }});
-            $('#checkstyle_chart_wrapper').animate({opacity: 1}, 2000);
             $('#builds_list li').animate({opacity: 1}, 2000);
+            {% if has_checkstyle %}
+                printCheckstyleChart('checkstyle_chart_wrapper', {{ project.getCheckstyleData(db, 20) }});
+                $('#checkstyle_chart_wrapper').animate({opacity: 1}, 2000);
+            {% endif %}
         });
     </script>
 {% endblock %}

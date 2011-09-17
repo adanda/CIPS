@@ -1,5 +1,5 @@
 {% for build in builds %}
-    <a href="##" onclick="projectToggle('{{ build.build }}')">
+    <a href="#" onclick="projectToggle('{{ build.build }}')">
         <li {% if build.success %} class="green invisible" {% else %} class="red invisible" {% endif %}>
             <div class="project">
                 <img id="image_{{ build.build }}" src="/images/arrow_closed.png" />#{{ build.build }}

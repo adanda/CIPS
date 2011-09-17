@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__.'/../../src/Cips/Project.php';
+require_once __DIR__.'/../../src/Cips/Projects/Project.php';
 require_once __DIR__.'/../stubs/DB.php';
 
 /**
@@ -12,7 +12,7 @@ class ProjectTest extends PHPUnit_Framework_TestCase
 {
     public function testConstruct()
     {
-        $svnProject = new Cips\SvnProject('test');
+        $svnProject = new Cips\Projects\SvnProject('test');
         $this->assertEquals('test', $svnProject->getName(),
             'SvnProject::__construct() sets the Name of the Project');
         $this->assertEquals('', $svnProject->getRepository(),
@@ -30,7 +30,7 @@ class ProjectTest extends PHPUnit_Framework_TestCase
 
     public function testSetName()
     {
-        $svnProject = new Cips\SvnProject('test');
+        $svnProject = new Cips\Projects\SvnProject('test');
         $svnProject->setName('myTestName with öäü');
         $this->assertEquals('myTestName with öäü', $svnProject->getName(),
             'SvnProject::setName() sets the Name for the Project');
@@ -38,7 +38,7 @@ class ProjectTest extends PHPUnit_Framework_TestCase
 
     public function testSetRepository()
     {
-        $svnProject = new Cips\SvnProject('test');
+        $svnProject = new Cips\Projects\SvnProject('test');
         $svnProject->setRepository('svn://testRepository/testProject');
         $this->assertEquals('svn://testRepository/testProject',
             $svnProject->getRepository(),
@@ -47,7 +47,7 @@ class ProjectTest extends PHPUnit_Framework_TestCase
 
     public function testSetBranch()
     {
-        $svnProject = new Cips\SvnProject('test');
+        $svnProject = new Cips\Projects\SvnProject('test');
         $svnProject->setBranch('branches/myTestBranch');
         $this->assertEquals('branches/myTestBranch', $svnProject->getBranch(),
             'SvnProject::setBranch() sets the Branch for the Project');
@@ -55,7 +55,7 @@ class ProjectTest extends PHPUnit_Framework_TestCase
 
     public function testSetSlug()
     {
-        $svnProject = new Cips\SvnProject('test');
+        $svnProject = new Cips\Projects\SvnProject('test');
         $svnProject->setSlug('my-test-project');
         $this->assertEquals('my-test-project', $svnProject->getSlug(),
             'SvnProject::setSlug() sets the Slug for the Project');
@@ -68,7 +68,7 @@ class ProjectTest extends PHPUnit_Framework_TestCase
             'my second command',
             'my-third-command'
         );
-        $svnProject = new Cips\SvnProject('test');
+        $svnProject = new Cips\Projects\SvnProject('test');
         $svnProject->setPreBuildCommands($commands);
         $this->assertEquals($commands, $svnProject->getPreBuildCommands(),
             'SvnProject::setPreBuildCommands() sets the PreBuildCommands for '.
@@ -77,7 +77,7 @@ class ProjectTest extends PHPUnit_Framework_TestCase
 
     public function testSetNotifier()
     {
-        $svnProject = new Cips\SvnProject('test');
+        $svnProject = new Cips\Projects\SvnProject('test');
         $svnProject->setNotifier('myNotifier@notifier.cips');
         $this->assertEquals('myNotifier@notifier.cips', $svnProject->getNotifier(),
             'SvnProject::setNotifier() sets the Notifier for the Project');
@@ -85,7 +85,7 @@ class ProjectTest extends PHPUnit_Framework_TestCase
 
     public function testGetLastBuild()
     {
-        $svnProject = new Cips\SvnProject('test');
+        $svnProject = new Cips\Projects\SvnProject('test');
 
         $this->assertFalse($svnProject->getLastBuild(FALSE),
             'SvnProject::getLastBuild() returns false when no DB is given');
@@ -174,7 +174,7 @@ class ProjectTest extends PHPUnit_Framework_TestCase
             'my second command',
             'my-third-command'
         );
-        $svnProject = new Cips\SvnProject('test');
+        $svnProject = new Cips\Projects\SvnProject('test');
         $svnProject->setPostBuildCommands($commands);
         $this->assertEquals($commands, $svnProject->getPostBuildCommands(),
             'SvnProject::setPostBuildCommands() sets the PostBuildCommands for '.
