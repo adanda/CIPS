@@ -44,6 +44,8 @@ You can set a test command for each project in ``config/projects.php`` with the
 setTestCommand('') function, for example:
 
 ```php
+<?php
+
 $your_project->setTestCommand('phpunit tests/');
 ```
 
@@ -58,6 +60,8 @@ has to be located under
 You can generate the report like in the following PHP Codesniffer example:
 
 ```php
+<?php
+
 $your_project->setPostBuildCommands(array(
     'phpcs --report=checkstyle --report-file=../reports/checkstyle.xml src/',
 ));
