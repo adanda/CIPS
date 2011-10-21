@@ -27,7 +27,7 @@ $app['autoloader']->registerNamespaces(
 // register Extensions for the Application
 $app->register(
     new Silex\Extension\TwigExtension(), array(
-        'twig.path' => __DIR__.'/templates',
+        'twig.path' => __DIR__.'/../views',
         'twig.class_path' => __DIR__.'/../vendor/twig/lib',
     )
 );
