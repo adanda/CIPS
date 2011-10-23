@@ -12,6 +12,10 @@
     <script type="text/javascript">
         $('document').ready(function() {
             $('#builds_list li').animate({opacity: 1}, 2000);
+            {% if has_testresult %}
+                printTestresultChart('testresult_chart_wrapper', {{ project.getTestresultData(db, 20) }});
+                $('#testresult_chart_wrapper').animate({opacity: 1}, 2000);
+            {% endif %}
             {% if has_checkstyle %}
                 printCheckstyleChart('checkstyle_chart_wrapper', {{ project.getCheckstyleData(db, 20) }});
                 $('#checkstyle_chart_wrapper').animate({opacity: 1}, 2000);
@@ -30,6 +34,11 @@
 {% block content %}
     <table class="clear chart_table">
         <tr>
+            <td>
+                <a href="/testresult/{{ project.getSlug }}">
+                    <div id="testresult_chart_wrapper" class="chart_wrapper invisible"></div>
+                </a>
+            </td>
             {% if has_checkstyle %}
                 <td>
                     <a href="/checkstyle/{{ project.getSlug }}">

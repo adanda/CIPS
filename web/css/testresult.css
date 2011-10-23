@@ -1,0 +1,50 @@
+.project_list div.testsuite {
+    margin-left: 30px;
+    width: 350px;
+    float: left;
+}
+
+.project_list .testsuite_number {
+    width: 130px;
+    float: left;
+}
+
+.project_list li.testsuite div.filename {
+    margin-left: 30px;
+}
+
+.project_list li.testsuite {
+    padding: 10px;
+    font-size: 1em;
+    background-color: #ffffff;
+    font-weight: bold;
+    height: 40px;
+    line-height: 20px;
+}
+
+.project_list li.passed {
+    background-image: url(../images/background_green_big.png);
+    background-position: right;
+    background-repeat: no-repeat;
+}
+
+.project_list li.failed {
+    background-image: url(../images/background_red_big.png);
+    background-position: right;
+    background-repeat: no-repeat;
+}
+
+.project_list li.testcase {
+    margin: 10px 20px;
+    padding:0 10px;
+    background-color: #000000;
+    color: #ffffff;
+}
+
+.project_list li.testcase div.name {
+    float: left;
+}
+
+.project_list li.testcase div.assertions {
+    float: right;
+}

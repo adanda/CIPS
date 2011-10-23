@@ -1,0 +1,35 @@
+{% set testsuite_attributes = testsuite.attributes %}
+{% set testsuite_class = 'passed' %}
+{% if testsuite_attributes.name != '' %}
+    {% if testsuite_attributes.failures > 0 or testsuite_attributes.errors > 0 %}
+        {% set testsuite_class = 'failed' %}
+    {% endif %}
+    <a href="##" onclick="jQuery('.{{ class }}').slideToggle()">
+        <li class="testsuite invisible {{ testsuite_class }}">
+            <div class="testsuite">{{ testsuite_attributes.name }}</div>
+            <div class="testsuite_number">{{ testsuite_attributes.tests }}</div>
+            <div class="testsuite_number">{{ testsuite_attributes.assertions }}</div>
+            <div class="testsuite_number">{{ testsuite_attributes.failures }}</div>
+            <div>{{ testsuite_attributes.errors }}</div>
+            <div class="filename">{{ testsuite_attributes.file }}</div>
+        </li>
+    </a>
+{% endif %}
+
+{% for item in testsuite %}
+    {% if item.name == 'testsuite' %}
+        {% include 'testsuite.html.twig' with {
+            'testsuite': item,
+            'class': class ~ '_' ~ loop.index,
+            'build_path': build_path
+        } %}
+    {% endif %}
+
+    {% if item.name == 'testcase' %}
+        {% include 'testcase.html.twig' with {
+            'testcase': item,
+            'class': class,
+            'build_path': build_path
+        } %}
+    {% endif %}
+{% endfor %}

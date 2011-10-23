@@ -1,0 +1,5 @@
+{% set testcase_attributes = testcase.attributes %}
+<li class="{{ class }} hidden testcase">
+    <div class="name">{{ testcase_attributes.name }}</div>
+    <div class="assertions">{{ testcase_attributes.assertions }} Assertions</div>
+</li>

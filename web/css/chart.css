@@ -9,3 +9,15 @@
 .jqplot-axis {
     color: #333333;
 }
+
+table.jqplot-table-legend {
+    margin-top: 24px;
+    width: 300px;
+    margin-left: -12px;
+    background-color: #ffffff;
+}
+
+.jqplot-table-legend tr {
+    display: block;
+    float: left;
+}

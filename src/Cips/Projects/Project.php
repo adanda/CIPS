@@ -328,12 +328,52 @@ abstract class Project
     }
 
     /**
-     * Get a Chart for the Checkstyle Errors of the Project
+     * Get the data for a Chart for the testresults of the Project
      *
      * @param SQLite3 $db            The SQLite3 Database Object
-     * @param in      $num_of_builds The Number of builds shown in the Chart
+     * @param int     $num_of_builds The Number of builds shown in the Chart
      *
-     * @return string The URL of a Chart from the Google Chart API
+     * @return string The data for the chart
+     */
+    public function getTestresultData($db, $num_of_builds)
+    {
+        $stmt = $db->prepare(
+            'SELECT * FROM builds_testresult WHERE slug = :slug '.
+            'ORDER BY build DESC LIMIT :limit'
+        );
+        $stmt->bindValue(':slug', $this->getSlug(), SQLITE3_TEXT);
+        $stmt->bindValue(':limit', $num_of_builds, SQLITE3_TEXT);
+
+        $tests_data = '[';
+        $assertions_data = '[';
+        $failures_data = '[';
+        $errors_data = '[';
+
+        if (FALSE !== $result = $stmt->execute()) {
+            while ($row = $result->fetchArray(\SQLITE3_ASSOC)) {
+                $tests_data .= '['.$row['build'].','.$row['tests'].'],';
+                $assertions_data .= '['.$row['build'].','.$row['assertions'].'],';
+                $failures_data .= '['.$row['build'].','.$row['failures'].'],';
+                $errors_data .= '['.$row['build'].','.$row['errors'].'],';
+            }
+        }
+
+        $tests_data .= ']';
+        $assertions_data .= ']';
+        $failures_data .= ']';
+        $errors_data .= ']';
+
+        return '['.$tests_data.', '.$assertions_data.', '
+            .$failures_data.', '.$errors_data.']';
+    }
+
+    /**
+     * Get the data for a chart for the Checkstyle Errors of the Project
+     *
+     * @param SQLite3 $db            The SQLite3 Database Object
+     * @param int     $num_of_builds The Number of builds shown in the Chart
+     *
+     * @return string The data for the chart
      */
     public function getCheckstyleData($db, $num_of_builds)
     {
@@ -417,6 +457,47 @@ abstract class Project
             throw new \RuntimeException(
                 sprintf('Unable to save project "%s".', $this->getName())
             );
+        }
+
+        // check if testresult-data is available
+        if (is_file($app['build.path'].'/'.$this->getSlug().
+        '/reports/testresult.xml')) {
+            $testresult = simplexml_load_file(
+                $app['build.path'].'/'.$this->getSlug().'/reports/testresult.xml'
+            );
+            $tests = 0;
+            $assertions = 0;
+            $failures = 0;
+            $errors = 0;
+            foreach ($testresult as $testsuite) {
+                $tests += $testsuite['tests'];
+                $assertions += $testsuite['assertions'];
+                $failures += $testsuite['failures'];
+                $errors += $testsuite['errors'];
+            }
+
+            $stmt = $app['db']->prepare(
+                'INSERT INTO builds_testresult '
+                .'(slug, build, tests, assertions, failures, errors) '
+                .'VALUES (:slug, :build, :tests, :assertions, :failures, :errors)'
+            );
+
+            $stmt->bindValue(':slug', $this->getSlug(), SQLITE3_TEXT);
+            if ($last_build) {
+                $stmt->bindValue(':build', $last_build['build']+1, SQLITE3_INTEGER);
+            } else {
+                $stmt->bindValue(':build', 1, SQLITE3_INTEGER);
+            }
+            $stmt->bindValue(':tests', $tests, SQLITE3_INTEGER);
+            $stmt->bindValue(':assertions', $assertions, SQLITE3_INTEGER);
+            $stmt->bindValue(':failures', $failures, SQLITE3_INTEGER);
+            $stmt->bindValue(':errors', $errors, SQLITE3_INTEGER);
+
+            if (FALSE === $stmt->execute()) {
+                throw new \RuntimeException(
+                    sprintf('Unable to save project "%s".', $this->getName())
+                );
+            }
         }
 
         // check if Checkstyle-Data is available

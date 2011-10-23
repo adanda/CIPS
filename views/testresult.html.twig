@@ -1,0 +1,49 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}CIPS | {{ project.getName }}{% endblock %}
+
+{% block head %}
+    {{ parent() }}
+    <link rel="stylesheet" href="/css/testresult.css" />
+    <script type="text/javascript">
+        $('document').ready(function() {
+            $('.project_list li').animate({opacity: 1}, 2000);
+        });
+    </script>
+{% endblock %}
+
+{% block breadcrumb %}
+    <div class="breadcrumb">
+        <img src="/images/arrow_breadcrumb_left.png" /><a class="left" href="/">Projects</a><img src="/images/arrow_breadcrumb_right.png" />
+        <img src="/images/arrow_breadcrumb_left.png" /><a class="left" href="/project/{{ project.getSlug }}">{{ project.getName }}</a><img src="/images/arrow_breadcrumb_right.png" />
+        <img src="/images/arrow_breadcrumb_left.png" /><a class="left" href="/testresult/{{ project.getSlug }}">Testresult</a><img src="/images/arrow_breadcrumb_right.png" />
+    </div>
+{% endblock %}
+    
+{% block content %}
+    <ul class="project_list">
+        <li class="header">
+            <div class="testsuite">Testsuite</div>
+            <div class="testsuite_number">Tests</div>
+            <div class="testsuite_number">Assertions</div>
+            <div class="testsuite_number">Failures</div>
+            <div>Errors</div>
+        </li>
+        {% for testsuite in testsuites %}
+            {% if testsuite.name == 'testsuite' %}
+                {% include 'testsuite.html.twig' with {
+                    'testsuite': testsuite,
+                    'class': loop.index,
+                    'build_path': build_path
+                } %}
+            {% endif %}
+            {% if testsuite.name == 'testcase' %}
+                {% include 'testcase.html.twig' with {
+                    'testcase': testsuite,
+                    'class': loop.index,
+                    'build_path': build_path
+                } %}
+            {% endif %}
+        {% endfor %}
+    </ul>
+{% endblock %}

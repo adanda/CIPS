@@ -36,6 +36,9 @@ $app->get('/project/{slug}', function($slug) use ($app)
         'has_checkstyle'    => file_exists(
             $app['data.path'].'/build/'.$project->getSlug().'/reports/checkstyle.xml'
         ),
+        'has_testresult'    => file_exists(
+            $app['data.path'].'/build/'.$project->getSlug().'/reports/testresult.xml'
+        ),
         'db'                => $app['db']
     ));
 });
@@ -74,3 +77,23 @@ $app->get('/loadbuilds/{slug}/{limit}/{offset}',
         ));
     }
 );
+
+$app->get('/testresult/{slug}', function($slug) use ($app)
+{
+    $projects = require __DIR__.'/../config/projects.php';
+    $project = $projects[$slug];
+    $testsuites = simplexml_load_file(
+        $app['data.path'].'/build/'.$project->getSlug().'/reports/testresult.xml'
+    );
+
+    return $app['twig']->render('testresult.html.twig', array(
+        'project'           => $project,
+        'testsuites'        => $testsuites,
+        'build_path'        => $app['data.path'].'/build/'
+            .$project->getSlug().'/source',
+        'testresult_time'   => date(
+            'd.m.Y H:i:s', filemtime($app['data.path'].'/build/'
+            .$project->getSlug().'/reports/testresult.xml')
+        )
+    ));
+});

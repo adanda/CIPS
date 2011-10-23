@@ -15,6 +15,34 @@ function printCheckstyleChart($container, $data)
                 pad: 1.1
             }
         },
-        series: [{color:'red'}]
+        series: [{color:'#e73131', label: 'Errors', showMarker: false, fill: false, fillAlpha: 0.3}],
+        legend: { show:true, placement: 'outside', location: 's' }
+    });
+}
+
+function printTestresultChart($container, $data)
+{
+    $.jqplot($container, $data, {
+        title: 'Testresults',
+        axesDefaults: {
+            labelRenderer: $.jqplot.CanvasAxisLabelRenderer
+        },
+        axes: {
+            yaxis: {
+                min: 0,
+                pad: 1.1,
+                tickInterval: 10
+            },
+            xaxis: {
+                pad: 1.1
+            }
+        },
+        series: [
+            {color: '#000000', label: 'Tests', showMarker: false, fill: false, fillAlpha:0.3},
+            {color: '#62cd3d', label: 'Assertions', showMarker: false, fill: false, fillAlpha: 0.3},
+            {color: '#e73131', label: 'Failures', showMarker: false, fill: false, fillAlpha: 0.3},
+            {color: '#ed973b', label: 'Errors', showMarker: false, fill: false, fillAlpha: 0.3}
+        ],
+        legend: { show:true, placement: 'outside', location: 's' }
     });
 }

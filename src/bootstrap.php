@@ -61,6 +61,16 @@ CREATE TABLE IF NOT EXISTS builds_checkstyle (
     errors   TEXT,
     PRIMARY KEY (slug, build)
 );
+
+CREATE TABLE IF NOT EXISTS builds_testresult (
+    slug        TEXT,
+    build       INT,
+    tests       INT,
+    assertions  INT,
+    failures    INT,
+    errors      INT,
+    PRIMARY KEY (slug, build)
+);
 EOF;
 
 $app['db'] = $app->share(function () use ($app)
