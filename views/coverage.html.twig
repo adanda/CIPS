@@ -1,0 +1,61 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}CIPS | {{ project.getName }}{% endblock %}
+
+{% block head %}
+    {{ parent() }}
+    <link rel="stylesheet" href="/css/coverage.css" />
+    <script type="text/javascript" src="/js/coverage.js"></script>
+    <script type="text/javascript">
+        $('document').ready(function() {
+            $('.project_list li').animate({opacity: 1}, 2000);
+        });
+    </script>
+{% endblock %}
+
+{% block breadcrumb %}
+    <div class="breadcrumb">
+        <img src="/images/arrow_breadcrumb_left.png" /><a class="left" href="/">Projects</a><img src="/images/arrow_breadcrumb_right.png" />
+        <img src="/images/arrow_breadcrumb_left.png" /><a class="left" href="/project/{{ project.getSlug }}">{{ project.getName }}</a><img src="/images/arrow_breadcrumb_right.png" />
+        <img src="/images/arrow_breadcrumb_left.png" /><a class="left" href="/coverage/{{ project.getSlug }}">Coverage</a><img src="/images/arrow_breadcrumb_right.png" />
+    </div>
+{% endblock %}
+    
+{% block content %}
+    <ul class="project_list">
+        <li class="header">
+            <div class="files">Files</div>
+            <div class="classes">Classes</div>
+            <div class="methods">Covered Methods</div>
+            <div class="elements">Covered Elements</div>
+        </li>
+        <li>
+            <div class="files">{{ coverage.project.metrics.attributes.files }}</div>
+            <div class="classes">{{ coverage.project.metrics.attributes.classes }}</div>
+            <div class="methods">{{ (coverage.project.metrics.attributes.coveredmethods / (coverage.project.metrics.attributes.methods / 100))|number(2) }}%</div>
+            <div class="elements">{{ (coverage.project.metrics.attributes.coveredelements / (coverage.project.metrics.attributes.elements / 100))|number(2) }}%</div>
+        </li>
+        {% for file in coverage.project.file %}
+            {% if file.name == 'file' %}
+                {% set file_metrics = file.metrics.attributes %}
+                {% set file_coverage = (file_metrics.coveredelements) / (file_metrics.elements / 100) %}
+                
+                {% if file_coverage < 75 %}
+                    {% set file_class = 'not_covered' %}
+                {% elseif file_coverage < 100 %}
+                    {% set file_class = 'nearly_covered' %}
+                {% else %}
+                    {% set file_class = 'covered' %}
+                {% endif %}
+        
+                <a href="##" onclick="loadFileDetails('file_{{ loop.index }}', '{{ file.attributes.name }}', '{{ project.getSlug }}')">
+                    <li class="file invisible {{ file_class }}">
+                        {{ file.attributes.name|str_replace(build_path, '/') }}<br/>
+                        Coverage: {{ file_coverage|number(2) }}%
+                    </li>
+                </a>
+                <li id="file_{{ loop.index }}" class="hidden details"></li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+{% endblock %}

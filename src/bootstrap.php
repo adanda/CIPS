@@ -35,11 +35,9 @@ $app->register(
 $app['swiftmailer.class_path'] = __DIR__.'/../vendor/swift/lib/classes';
 $app->register(new Silex\Extension\SwiftmailerExtension(), array());
 
-$app['data.path']   = __DIR__.'/../data';
-$app['build.path']  = $app->share(function ($app)
-{
-    return $app['data.path'].'/build';
-});
+$app['data.path']   = realpath(__DIR__.'/../data');
+$app['build.path']  = $app['data.path'].'/build';
+
 $app['db.path']     = $app->share(function ($app)
 {
     return $app['data.path'].'/cips.db';
@@ -69,6 +67,24 @@ CREATE TABLE IF NOT EXISTS builds_testresult (
     assertions  INT,
     failures    INT,
     errors      INT,
+    PRIMARY KEY (slug, build)
+);
+
+CREATE TABLE IF NOT EXISTS builds_coverage (
+    slug                TEXT,
+    build               INT,
+    files               INT,
+    loc                 INT,
+    ncloc               INT,
+    classes             INT,
+    methods             INT,
+    coveredmethods      INT,
+    conditionals        INT,
+    coveredconditionals INT,
+    statements          INT,
+    coveredstatements   INT,
+    elements            INT,
+    coveredelements     INT,
     PRIMARY KEY (slug, build)
 );
 EOF;

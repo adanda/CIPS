@@ -335,7 +335,7 @@ abstract class Project
      *
      * @return string The data for the chart
      */
-    public function getTestresultData($db, $num_of_builds)
+    public function getTestresultChartData($db, $num_of_builds)
     {
         $stmt = $db->prepare(
             'SELECT * FROM builds_testresult WHERE slug = :slug '.
@@ -368,6 +368,37 @@ abstract class Project
     }
 
     /**
+     * Get the data for a Chart for the coverage of the Project
+     *
+     * @param SQLite3 $db            The SQLite3 Database Object
+     * @param int     $num_of_builds The Number of builds shown in the Chart
+     *
+     * @return string The data for the chart
+     */
+    public function getCoverageChartData($db, $num_of_builds)
+    {
+        $stmt = $db->prepare(
+            'SELECT build, elements, coveredelements FROM builds_coverage '.
+            'WHERE slug = :slug ORDER BY build DESC LIMIT :limit'
+        );
+        $stmt->bindValue(':slug', $this->getSlug(), SQLITE3_TEXT);
+        $stmt->bindValue(':limit', $num_of_builds, SQLITE3_TEXT);
+
+        $data = '[[';
+
+        if (FALSE !== $result = $stmt->execute()) {
+            while ($row = $result->fetchArray(\SQLITE3_ASSOC)) {
+                $data .= '['.$row['build'].',';
+                $data .= ($row['coveredelements']) / ($row['elements'] / 100);
+                $data .= '],';
+            }
+        }
+
+        $data .= ']]';
+        return $data;
+    }
+
+    /**
      * Get the data for a chart for the Checkstyle Errors of the Project
      *
      * @param SQLite3 $db            The SQLite3 Database Object
@@ -375,7 +406,7 @@ abstract class Project
      *
      * @return string The data for the chart
      */
-    public function getCheckstyleData($db, $num_of_builds)
+    public function getCheckstyleChartData($db, $num_of_builds)
     {
         $stmt = $db->prepare(
             'SELECT * FROM builds_checkstyle WHERE slug = :slug '.
@@ -492,6 +523,70 @@ abstract class Project
             $stmt->bindValue(':assertions', $assertions, SQLITE3_INTEGER);
             $stmt->bindValue(':failures', $failures, SQLITE3_INTEGER);
             $stmt->bindValue(':errors', $errors, SQLITE3_INTEGER);
+
+            if (FALSE === $stmt->execute()) {
+                throw new \RuntimeException(
+                    sprintf('Unable to save project "%s".', $this->getName())
+                );
+            }
+        }
+
+        // check if code-coverage data is available
+        if (is_file($app['build.path'].'/'.$this->getSlug().
+        '/reports/coverage.xml')) {
+            $coverage = simplexml_load_file(
+                $app['build.path'].'/'.$this->getSlug().'/reports/coverage.xml'
+            );
+            $metrics = $coverage->project->metrics;
+
+            $stmt = $app['db']->prepare(
+                'INSERT INTO builds_coverage '
+                .'(slug, build, files, loc, ncloc, classes, methods, '
+                .'coveredmethods, conditionals, coveredconditionals, statements, '
+                .'coveredstatements, elements, coveredelements) '
+                .'VALUES (:slug, :build, :files, :loc, :ncloc, :classes, :methods, '
+                .':coveredmethods, :conditionals, :coveredconditionals, '
+                .':statements, :coveredstatements, :elements, :coveredelements)'
+            );
+
+            $stmt->bindValue(':slug', $this->getSlug(), SQLITE3_TEXT);
+            if ($last_build) {
+                $stmt->bindValue(':build', $last_build['build']+1, SQLITE3_INTEGER);
+            } else {
+                $stmt->bindValue(':build', 1, SQLITE3_INTEGER);
+            }
+            $stmt->bindValue(':files', $metrics['files'], SQLITE3_INTEGER);
+            $stmt->bindValue(':loc', $metrics['loc'], SQLITE3_INTEGER);
+            $stmt->bindValue(':ncloc', $metrics['ncloc'], SQLITE3_INTEGER);
+            $stmt->bindValue(':classes', $metrics['classes'], SQLITE3_INTEGER);
+            $stmt->bindValue(':methods', $metrics['methods'], SQLITE3_INTEGER);
+            $stmt->bindValue(
+                ':coveredmethods',
+                $metrics['coveredmethods'],
+                SQLITE3_INTEGER
+            );
+            $stmt->bindValue(
+                ':conditionals',
+                $metrics['conditionals'],
+                SQLITE3_INTEGER
+            );
+            $stmt->bindValue(
+                ':coveredconditionals',
+                $metrics['coveredconditionals'],
+                SQLITE3_INTEGER
+            );
+            $stmt->bindValue(':statements', $metrics['statements'], SQLITE3_INTEGER);
+            $stmt->bindValue(
+                ':coveredstatements',
+                $metrics['coveredstatements'],
+                SQLITE3_INTEGER
+            );
+            $stmt->bindValue(':elements', $metrics['elements'], SQLITE3_INTEGER);
+            $stmt->bindValue(
+                ':coveredelements',
+                $metrics['coveredelements'],
+                SQLITE3_INTEGER
+            );
 
             if (FALSE === $stmt->execute()) {
                 throw new \RuntimeException(

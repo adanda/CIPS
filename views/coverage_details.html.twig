@@ -1,0 +1,19 @@
+{% for line in file %}
+
+    {% if rows[loop.index] is sameas(null) %}
+        {% set class = '' %}
+    {% elseif rows[loop.index] > 0 %}
+        {% set class = 'green' %}
+    {% else %}
+        {% set class = 'red' %}
+    {% endif %}
+
+    <div class="details_row {{ class }}">
+        {% if loop.index < 10 %}
+            0{{ loop.index }}:
+        {% else %}
+            {{ loop.index }}:
+        {% endif %}
+        &nbsp;&nbsp;<pre>{{ line }}</pre>
+    </div>
+{% endfor %}

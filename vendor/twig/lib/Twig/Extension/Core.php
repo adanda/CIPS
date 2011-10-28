@@ -41,9 +41,11 @@ class Twig_Extension_Core extends Twig_Extension
     {
         $filters = array(
             // formatting filters
-            'date'    => new Twig_Filter_Function('twig_date_format_filter'),
-            'format'  => new Twig_Filter_Function('sprintf'),
-            'replace' => new Twig_Filter_Function('twig_strtr'),
+            'date'        => new Twig_Filter_Function('twig_date_format_filter'),
+            'format'      => new Twig_Filter_Function('sprintf'),
+            'number'      => new Twig_Filter_Function('twig_number_filter'),
+            'replace'     => new Twig_Filter_Function('twig_strtr'),
+            'str_replace' => new Twig_Filter_Function('twig_str_replace'),
 
             // encoding
             'url_encode'  => new Twig_Filter_Function('twig_urlencode_filter'),
@@ -496,4 +498,14 @@ function twig_test_defined($name, $context)
 function twig_test_empty($value)
 {
     return null === $value || false === $value || '' === (string) $value;
+}
+
+function twig_number_filter($number, $decimals = 0, $dec_point = '.', $thousands_sep = ',')
+{
+    return number_format($number, $decimals, $dec_point, $thousands_sep);
+}
+
+function twig_str_replace($string, $search, $replace)
+{
+    return str_replace($search, $replace, $string);
 }

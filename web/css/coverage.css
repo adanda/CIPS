@@ -1,0 +1,68 @@
+.project_list .files {
+    margin-left: 20px;
+    float:left;
+    width: 100px;
+}
+
+.project_list .classes {
+    float:left;
+    width: 120px;
+}
+
+.project_list .methods {
+    float:left;
+    width: 200px;
+}
+
+.project_list .elements {
+    float:left;
+}
+
+.project_list .file {
+    padding: 10px;
+    font-size: 1em;
+    background-color: #ffffff;
+    font-weight: none;
+    height: 40px;
+    line-height: 20px;
+    background-position: right;
+    background-repeat: no-repeat;
+}
+
+.project_list .not_covered {
+    background-image: url(../images/background_red_big.png);
+}
+
+.project_list .covered {
+    background-image: url(../images/background_green_big.png);
+}
+
+.project_list .nearly_covered {
+    background-image: url(../images/background_yellow_big.png);
+}
+
+.project_list .details {
+    padding: 10px;
+    height: auto;
+    font-family: Monospace;
+    font-size: 12px;
+    line-height: 12px;
+    color: #000000;
+    background-color: lightgrey !important;
+}
+
+.project_list .details .details_row {
+    background-image: none;
+}
+
+.project_list .details .details_row pre {
+    display: inline;
+}
+
+.project_list .details .red {
+    background-color: #c71112;
+}
+
+.project_list .details .green {
+    background-color: #009600;
+}

@@ -11,6 +11,7 @@
  * @link     Project
  */
 
+use Symfony\Component\HttpFoundation\Request;
 
 $app->error(function(Exception $e) use ($app)
 {
@@ -38,6 +39,9 @@ $app->get('/project/{slug}', function($slug) use ($app)
         ),
         'has_testresult'    => file_exists(
             $app['data.path'].'/build/'.$project->getSlug().'/reports/testresult.xml'
+        ),
+        'has_coverage'      => file_exists(
+            $app['data.path'].'/build/'.$project->getSlug().'/reports/coverage.xml'
         ),
         'db'                => $app['db']
     ));
@@ -90,10 +94,60 @@ $app->get('/testresult/{slug}', function($slug) use ($app)
         'project'           => $project,
         'testsuites'        => $testsuites,
         'build_path'        => $app['data.path'].'/build/'
-            .$project->getSlug().'/source',
-        'testresult_time'   => date(
-            'd.m.Y H:i:s', filemtime($app['data.path'].'/build/'
-            .$project->getSlug().'/reports/testresult.xml')
+            .$project->getSlug().'/source'
         )
-    ));
+    );
+});
+
+$app->get('/coverage/{slug}', function($slug) use ($app)
+{
+    $projects = require __DIR__.'/../config/projects.php';
+    $project = $projects[$slug];
+    $coverage = simplexml_load_file(
+        $app['data.path'].'/build/'.$project->getSlug().'/reports/coverage.xml'
+    );
+
+    return $app['twig']->render('coverage.html.twig', array(
+        'project'           => $project,
+        'coverage'          => $coverage,
+        'build_path'        => $app['data.path'].'/build/'
+            .$project->getSlug().'/source/'
+        )
+    );
+});
+
+$app->post('/coverage/details', function(Request $request) use ($app)
+{
+    $projects = require __DIR__.'/../config/projects.php';
+    $project = $projects[$request->get('slug')];
+    $path = $request->get('path');
+    $coverage = simplexml_load_file(
+        $app['data.path'].'/build/'.$project->getSlug().'/reports/coverage.xml'
+    );
+
+    $file = file($path);
+    if ($file === FALSE) {
+        return '<h1>Error reading file!</h1>';
+    }
+
+    foreach ($coverage->project->file as $row) {
+        if ($row['name'] == $path) {
+            break;
+        }
+    }
+
+    if (!isset($row)) {
+        return '<h1>Error reading file!</h1>';
+    }
+
+    $rows = array();
+    foreach ($row->line as $line) {
+        $rows[$line['num']->__toString()] = $line['count']->__toString();
+    }
+
+    return $app['twig']->render('coverage_details.html.twig', array(
+        'file'  => $file,
+        'rows'  => $rows
+        )
+    );
 });

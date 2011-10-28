@@ -13,11 +13,15 @@
         $('document').ready(function() {
             $('#builds_list li').animate({opacity: 1}, 2000);
             {% if has_testresult %}
-                printTestresultChart('testresult_chart_wrapper', {{ project.getTestresultData(db, 20) }});
+                printTestresultChart('testresult_chart_wrapper', {{ project.getTestresultChartData(db, 20) }});
                 $('#testresult_chart_wrapper').animate({opacity: 1}, 2000);
             {% endif %}
+            {% if has_coverage %}
+                printCoverageChart('coverage_chart_wrapper', {{ project.getCoverageChartData(db, 20) }});
+                $('#coverage_chart_wrapper').animate({opacity: 1}, 2000);
+            {% endif %}
             {% if has_checkstyle %}
-                printCheckstyleChart('checkstyle_chart_wrapper', {{ project.getCheckstyleData(db, 20) }});
+                printCheckstyleChart('checkstyle_chart_wrapper', {{ project.getCheckstyleChartData(db, 20) }});
                 $('#checkstyle_chart_wrapper').animate({opacity: 1}, 2000);
             {% endif %}
         });
@@ -34,11 +38,20 @@
 {% block content %}
     <table class="clear chart_table">
         <tr>
-            <td>
-                <a href="/testresult/{{ project.getSlug }}">
-                    <div id="testresult_chart_wrapper" class="chart_wrapper invisible"></div>
-                </a>
-            </td>
+            {% if has_testresult %}
+                <td>
+                    <a href="/testresult/{{ project.getSlug }}">
+                        <div id="testresult_chart_wrapper" class="chart_wrapper invisible"></div>
+                    </a>
+                </td>
+            {% endif %}
+            {% if has_coverage %}
+                <td>
+                    <a href="/coverage/{{ project.getSlug }}">
+                        <div id="coverage_chart_wrapper" class="chart_wrapper invisible"></div>
+                    </a>
+                </td>
+            {% endif %}
             {% if has_checkstyle %}
                 <td>
                     <a href="/checkstyle/{{ project.getSlug }}">
