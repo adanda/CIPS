@@ -65,7 +65,9 @@ $app->get('/checkstyle/{slug}', function($slug) use ($app)
         'checkstyle_time'   => date(
             'd.m.Y H:i:s', filemtime($app['data.path'].'/build/'
             .$project->getSlug().'/reports/checkstyle.xml')
-        )
+        ),
+        'build_path'        => $app['data.path'].'/build/'
+            .$project->getSlug().'/source/'
     ));
 });
 
@@ -94,7 +96,7 @@ $app->get('/testresult/{slug}', function($slug) use ($app)
         'project'           => $project,
         'testsuites'        => $testsuites,
         'build_path'        => $app['data.path'].'/build/'
-            .$project->getSlug().'/source'
+            .$project->getSlug().'/source/'
         )
     );
 });

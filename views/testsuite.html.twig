@@ -11,7 +11,7 @@
             <div class="testsuite_number">{{ testsuite_attributes.assertions }}</div>
             <div class="testsuite_number">{{ testsuite_attributes.failures }}</div>
             <div>{{ testsuite_attributes.errors }}</div>
-            <div class="filename">{{ testsuite_attributes.file }}</div>
+            <div class="filename">{{ testsuite_attributes.file|str_replace(build_path, '/') }}</div>
         </li>
     </a>
 {% endif %}

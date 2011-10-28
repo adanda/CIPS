@@ -38,7 +38,7 @@
                 {% set file_attributes = file.attributes %}
                 <a href="##" onclick="jQuery('.{{ file_class }}').slideToggle()">
                     <li class="file invisible">
-                        {{ file_attributes.name }}
+                        {{ file_attributes.name|str_replace(build_path, '/') }}
                         <br/>
                         <b>Errors:</b> {{ file|length }}
                     </li>
