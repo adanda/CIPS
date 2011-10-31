@@ -49,6 +49,21 @@ setTestCommand('') function, for example:
 $your_project->setTestCommand('phpunit tests/');
 ```
 
+CIPS supports test and code coverage reports in xml format (the testresults in
+junit format and the code coverage report in clover format). The file with the
+xml test report has to be located under 
+``data/buils/your_project_slug/reports/testresult.xml``,
+the xml-file with the code coverage report has to be located under
+``data/buils/your_project_slug/reports/coverage.xml``.
+
+You can generate the reports like in the following PHPUnit example:
+
+```php
+<?php
+
+$your_project->setTestCommand('phpunit tests/ --log-junit "../reports/testresult.xml" --coverage-clover "../reports/coverage.xml"');
+```
+
 ### Checkstyle
 
 You can set a checkstyle task as a post build command in 

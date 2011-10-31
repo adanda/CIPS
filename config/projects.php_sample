@@ -12,7 +12,7 @@
         'your pre-build-command #1',
         'your pre-build-command #2',
     ));
-    $your_git_project->setTestCommand('your test command, e.g phpunit');
+    $your_git_project->setTestCommand('phpunit tests/ --log-junit "../reports/testresult.xml" --coverage-clover "../reports/coverage.xml"');
     $your_git_project->setPostBuildCommands(array(
         'your post-build-command #1',
         'your post-build-command #2',
@@ -30,7 +30,7 @@
         'your pre-build-command #1',
         'your pre-build-command #2',
     ));
-    $your_svn_project->setTestCommand('your test command, e.g phpunit');
+    $your_svn_project->setTestCommand('phpunit tests/ --log-junit "../reports/testresult.xml" --coverage-clover "../reports/coverage.xml"');
     $your_svn_project->setPostBuildCommands(array(
         'your post-build-command #1',
         'your post-build-command #2',
