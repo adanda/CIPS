@@ -22,8 +22,13 @@ class SvnProjectTest extends PHPUnit_Framework_TestCase
             ->will($this->returnValue(TRUE));
 
         $this->assertEquals($svnProject, $svnProject->checkout(''),
-            'SvnProject::checkout() returns the object itself when the checkout '.
-            'is sucessfull');
+            'SvnProject::checkout() returns the object itself when the project '.
+            'does exist and the checkout is sucessfull');
+
+        $svnProject->setSlug(uniqid('cips', TRUE));
+        $this->assertEquals($svnProject, $svnProject->checkout(sys_get_temp_dir()),
+            'SvnProject::checkout() returns the object itself when the project '.
+            'does not exist and the checkout is sucessfull');
     }
 
     public function testUpdate()
@@ -36,7 +41,7 @@ class SvnProjectTest extends PHPUnit_Framework_TestCase
             ->will($this->returnValue(TRUE));
 
         $this->assertEquals($svnProject, $svnProject->update(''),
-            'SvnProject::update() returns the object itself when the update '.
-            'is sucessfull');
+            'SvnProject::update() returns the object itself when the project '.
+            'does exist and the update is sucessfull');
     }
 }
