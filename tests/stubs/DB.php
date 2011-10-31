@@ -1,5 +1,5 @@
 <?php
-/* 
+/*
  * Stub for the SQLite3 DB CLass
  */
 

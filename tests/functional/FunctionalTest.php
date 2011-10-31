@@ -17,7 +17,22 @@ class FunctionalTest extends Silex\WebTestCase
         return $app;
     }
 
-    public function testIndex()
+    public function testIndexPage()
+    {
+        $client = $this->createClient();
+        $crawler = $client->request('GET', '/');
+        $this->assertTrue($client->getResponse()->isOk());
+        $this->assertEquals(1, count($crawler->filter(
+                'title:contains("CIPS | Continuous Integration PHP Server")'
+        )));
+        $this->assertTrue(
+            $crawler->filter('html:contains("Project")')->count() == 1
+        );
+        $this->assertTrue($crawler->filter('html:contains("Build")')->count() == 1);
+        $this->assertTrue($crawler->filter('html:contains("Date")')->count() == 1);
+    }
+
+    public function testProjectPage()
     {
         $client = $this->createClient();
         $crawler = $client->request('GET', '/');
