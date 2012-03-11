@@ -36,6 +36,10 @@
 {% endblock %}
 
 {% block content %}
+    {% if project.getDocumentationLink %}
+        <a class="documentation_link" href="{{ project.getDocumentationLink }}" target="_blank">Project Documentation</a>
+    {% endif %}
+    
     <table class="clear chart_table">
         <tr>
             {% if has_testresult %}

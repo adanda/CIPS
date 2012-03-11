@@ -75,6 +75,12 @@ abstract class Project
     private $_notifier = '';
 
     /**
+     * The link to the documentation of the project
+     * @var string
+     */
+    private $_documentation_link = '';
+
+    /**
      * Constructor
      *
      * @param string $name The Name of the Project
@@ -268,6 +274,29 @@ abstract class Project
     public function getNotifier()
     {
         return $this->_notifier;
+    }
+
+    /**
+     * Setter for the documentation link
+     * 
+     * @param string $documentation_link The link to the projects documentation
+     * 
+     * @return Project The Object itself
+     */
+    public function setDocumentationLink($documentation_link)
+    {
+        $this->_documentation_link = $documentation_link;
+        return $this;
+    }
+
+    /**
+     * Getter for the documentation link
+     *
+     * @return string The link to the projects documentation
+     */
+    public function getDocumentationLink()
+    {
+        return $this->_documentation_link;
     }
 
     /**

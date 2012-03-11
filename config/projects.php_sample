@@ -20,6 +20,7 @@
     ));
     $your_git_project->setSlug('your_project_slug');
     $your_git_project->setNotifier(new Cips\Notifications\EmailNotification('your notification emails', 'your sender adress'));
+    $your_git_project->setDocumentationLink('http://link/to/your/documentation');
     $projects['your_project_slug'] = $your_git_project;
 
     // add a SVN Project
@@ -38,6 +39,7 @@
     ));
     $your_svn_project->setSlug('your_project_slug');
     $your_svn_project->setNotifier(new Cips\Notifications\EmailNotification('your notification emails', 'your sender adress'));
+    $your_svn_project->setDocumentationLink('http://link/to/your/documentation');
     $projects['your_project_slug'] = $your_svn_project;
 
     return $projects;

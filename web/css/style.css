@@ -142,6 +142,17 @@ a, a:hover {
     color: #ffffff;
 }
 
+.documentation_link {
+    margin-left: 50px;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+.documentation_link:hover {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
 .chart_table {
     margin: 20px 0 30px 50px;
 }
