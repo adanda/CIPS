@@ -22,3 +22,16 @@ function loadBuildResults($project_slug, $number)
         }
     });
 }
+
+function buildProject($project_slug)
+{
+    $('#loader_build').show();
+    $.ajax({
+        url: '/build/'+$project_slug,
+        success: function($html){
+            $('#loader_build').hide();
+            $('#builds_list').children().first().after($html);
+            $('#builds_list li').animate({opacity: 1}, 2000);
+        }
+    });
+}

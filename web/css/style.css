@@ -146,10 +146,25 @@ a, a:hover {
     color: #ffffff;
 }
 
-.documentation_link {
+.link {
     margin-left: 50px;
     font-weight: bold;
     color: #ffffff;
+}
+
+.build_link {
+    display: block;
+    float: left;
+    margin-left: 50px;
+    width: 60px;
+}
+
+.build_link #loader_build {
+    display: none;
+}
+
+.documentation_link {
+    margin-left: 20px;
 }
 
 .chart_table {

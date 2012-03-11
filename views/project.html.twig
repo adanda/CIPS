@@ -36,8 +36,9 @@
 {% endblock %}
 
 {% block content %}
+    <a class="link build_link" href="#" onclick="buildProject('{{ project.slug }}')">build&nbsp;<img id="loader_build" src="/images/loader_build.gif" /></a>
     {% if project.getDocumentationLink %}
-        <a class="documentation_link" href="{{ project.getDocumentationLink }}" target="_blank">Project Documentation</a>
+        <a class="link documentation_link" href="{{ project.getDocumentationLink }}" target="_blank">Project Documentation</a>
     {% endif %}
     
     <table class="clear chart_table">
