@@ -1,13 +1,11 @@
 {% for build in builds %}
-    <a href="#" onclick="projectToggle('{{ build.build }}')">
-        <li {% if build.success %} class="green invisible" {% else %} class="red invisible" {% endif %}>
-            <div class="project">
-                <img id="image_{{ build.build }}" src="/images/arrow_closed.png" />#{{ build.build }}
-            </div>
-            <div class="build">&nbsp;</div>
-            <div class="date">{{ build.build_date|date("d.m.Y H:i:s") }}</div>
-        </li>
-    </a>
+    <li {% if build.success %} onclick="projectToggle('{{ build.build }}')" class="green invisible buildline" {% else %} class="red invisible buildline" {% endif %}>
+        <div class="project">
+            <img id="image_{{ build.build }}" src="/images/arrow_closed.png" />#{{ build.build }}
+        </div>
+        <div class="build">&nbsp;</div>
+        <div class="date">{{ build.build_date|date("d.m.Y H:i:s") }}</div>
+    </li>
     <div id="build_{{ build.build }}" class="output hidden">
         {{ build.output|replace({'\n':'<br/>'})|raw }}
     </div>

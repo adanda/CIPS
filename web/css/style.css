@@ -79,6 +79,10 @@ a, a:hover {
     background-color: #ffffff;
 }
 
+.project_list li.buildline:hover {
+    cursor: pointer;
+}
+
 .project_list li img {
     vertical-align: middle;
     margin-right: 10px;
@@ -146,11 +150,6 @@ a, a:hover {
     margin-left: 50px;
     font-weight: bold;
     color: #ffffff;
-}
-
-.documentation_link:hover {
-    color: #ffffff;
-    text-decoration: underline;
 }
 
 .chart_table {
