@@ -35,27 +35,34 @@
             <div class="methods">{{ (coverage.project.metrics.attributes.coveredmethods / (coverage.project.metrics.attributes.methods / 100))|number(2) }}%</div>
             <div class="elements">{{ (coverage.project.metrics.attributes.coveredelements / (coverage.project.metrics.attributes.elements / 100))|number(2) }}%</div>
         </li>
-        {% for file in coverage.project.file %}
-            {% if file.name == 'file' %}
-                {% set file_metrics = file.metrics.attributes %}
-                {% set file_coverage = (file_metrics.coveredelements) / (file_metrics.elements / 100) %}
-                
-                {% if file_coverage < 75 %}
-                    {% set file_class = 'not_covered' %}
-                {% elseif file_coverage < 100 %}
-                    {% set file_class = 'nearly_covered' %}
-                {% else %}
-                    {% set file_class = 'covered' %}
+        {% for package in coverage.project.package %}
+            {% set prefix = loop.index %}
+            {% for file in package.file %}
+                {% if file.name == 'file' %}
+                    {% set file_metrics = file.metrics.attributes %}
+                    {% if file_metrics.elements > 0 %}
+                        {% set file_coverage = (file_metrics.coveredelements) / (file_metrics.elements / 100) %}
+                    {% else %}
+                        {% set file_coverage = 0 %}
+                    {% endif %}
+                    
+                    {% if file_coverage < 75 %}
+                        {% set file_class = 'not_covered' %}
+                    {% elseif file_coverage < 100 %}
+                        {% set file_class = 'nearly_covered' %}
+                    {% else %}
+                        {% set file_class = 'covered' %}
+                    {% endif %}
+            
+                    <a href="##" onclick="loadFileDetails('file_{{ prefix~'_'~loop.index }}', '{{ file.attributes.name }}', '{{ project.getSlug }}')">
+                        <li class="file invisible {{ file_class }}">
+                            {{ file.attributes.name|str_replace(build_path, '/') }}<br/>
+                            Coverage: {{ file_coverage|number(2) }}%
+                        </li>
+                    </a>
+                    <li id="file_{{ prefix~'_'~loop.index }}" class="hidden details"></li>
                 {% endif %}
-        
-                <a href="##" onclick="loadFileDetails('file_{{ loop.index }}', '{{ file.attributes.name }}', '{{ project.getSlug }}')">
-                    <li class="file invisible {{ file_class }}">
-                        {{ file.attributes.name|str_replace(build_path, '/') }}<br/>
-                        Coverage: {{ file_coverage|number(2) }}%
-                    </li>
-                </a>
-                <li id="file_{{ loop.index }}" class="hidden details"></li>
-            {% endif %}
+            {% endfor %}
         {% endfor %}
     </ul>
 {% endblock %}

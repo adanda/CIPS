@@ -132,9 +132,11 @@ $app->post('/coverage/details', function(Request $request) use ($app)
         return '<h1>Error reading file!</h1>';
     }
 
-    foreach ($coverage->project->file as $row) {
-        if ($row['name'] == $path) {
-            break;
+    foreach ($coverage->project->package as $package) {
+        foreach ($package->file as $row) {
+            if ($row['name'] == $path) {
+                break 2;
+            }
         }
     }
 
