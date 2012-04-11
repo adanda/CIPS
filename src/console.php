@@ -238,6 +238,28 @@ EOF
                 sprintf('Unable to delete project "%s".', $this->getName())
             );
         }
+
+        // Delete coverage
+        $stmt = $app['db']->prepare(
+            'DELETE FROM builds_coverage WHERE slug = :slug'
+        );
+        $stmt->bindValue(':slug', $slug, SQLITE3_TEXT);
+        if (FALSE === $stmt->execute()) {
+            throw new \RuntimeException(
+                sprintf('Unable to delete project "%s".', $this->getName())
+            );
+        }
+
+        // Delete testresults
+        $stmt = $app['db']->prepare(
+            'DELETE FROM builds_testresult WHERE slug = :slug'
+        );
+        $stmt->bindValue(':slug', $slug, SQLITE3_TEXT);
+        if (FALSE === $stmt->execute()) {
+            throw new \RuntimeException(
+                sprintf('Unable to delete project "%s".', $this->getName())
+            );
+        }
     } else {
         $output->write("\n<info>Start deleting Database ...</info>\n");
         unlink($app['db.path']);
