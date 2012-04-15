@@ -41,7 +41,7 @@
                 {% if file.name == 'file' %}
                     {% set file_metrics = file.metrics.attributes %}
                     {% if file_metrics.elements > 0 %}
-                        {% set file_coverage = (file_metrics.coveredelements) / (file_metrics.elements / 100) %}
+                        {% set file_coverage = (file_metrics.coveredelements / file_metrics.elements) * 100 %}
                     {% else %}
                         {% set file_coverage = 0 %}
                     {% endif %}
