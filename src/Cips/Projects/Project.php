@@ -519,12 +519,6 @@ abstract class Project
             );
         }
 
-        // set permissions
-        $process = new Process(
-            'chmod -R 777 '.$app['build.path'].'/'.$this->getSlug()
-        );
-        $process->run();
-
         // check if testresult-data is available
         if (is_file($app['build.path'].'/'.$this->getSlug().
         '/reports/testresult.xml')) {

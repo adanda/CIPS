@@ -48,12 +48,6 @@ class SvnProject extends Project
 
             $process = new Process($cmd);
             $process->run();
-
-            // set permissions
-            $process = new Process(
-                'chmod -R 777 '.$data_path.'/'.$this->getSlug()
-            );
-            $process->run();
         } else {
             return $this->update($data_path);
         }
@@ -74,12 +68,6 @@ class SvnProject extends Project
             $cmd = 'svn up '.$data_path.'/'.$this->getSlug().'/source';
 
             $process = new Process($cmd);
-            $process->run();
-
-            // set permissions
-            $process = new Process(
-                'chmod -R 777 '.$data_path.'/'.$this->getSlug()
-            );
             $process->run();
         }
 

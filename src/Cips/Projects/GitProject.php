@@ -48,12 +48,6 @@ class GitProject extends Project
 
             $process = new Process($cmd);
             $process->run();
-
-            // set permissions
-            $process = new Process(
-                'chmod -R 777 '.$data_path.'/'.$this->getSlug()
-            );
-            $process->run();
         } else {
             return $this->update($data_path);
         }
@@ -75,12 +69,6 @@ class GitProject extends Project
             $dir = $data_path.'/'.$this->getSlug().'/source';
 
             $process = new Process($cmd, $dir);
-            $process->run();
-
-            // set permissions
-            $process = new Process(
-                'chmod -R 777 '.$data_path.'/'.$this->getSlug()
-            );
             $process->run();
         }
 
