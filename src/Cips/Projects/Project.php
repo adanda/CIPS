@@ -472,6 +472,7 @@ abstract class Project
                 $cmd, $app['build.path'].'/'.$this->getSlug().'/source'
             );
             $process->run();
+            $output .= $this->generateComposedOutput($cmd, $process->getOutput());
         }
 
         if ($this->getTestCommand() != '') {
@@ -483,7 +484,10 @@ abstract class Project
             if (!$process->isSuccessful()) {
                 $success = FALSE;
             }
-            $output = $process->getOutput();
+            $output .= $this->generateComposedOutput(
+                $this->getTestCommand(),
+                $process->getOutput()
+            );
         }
 
         foreach ($this->getPostBuildCommands() as $cmd) {
@@ -491,6 +495,7 @@ abstract class Project
                 $cmd, $app['build.path'].'/'.$this->getSlug().'/source'
             );
             $process->run();
+            $output .= $this->generateComposedOutput($cmd, $process->getOutput());
         }
 
         if (!$success) {
@@ -659,6 +664,23 @@ abstract class Project
         }
 
         return $this;
+    }
+
+    /**
+     * Composes the command and the output to a readable string.
+     *
+     * @param string $cmd    The command that was executed
+     * @param string $output The output of the command
+     *
+     * @return string The composed output
+     */
+    protected function generateComposedOutput($cmd, $output)
+    {
+        $composed_output = str_repeat('*', 100)."\n\r\n\r";
+        $composed_output .= '$ '.$cmd."\n\r\n\r\n\r";
+        $composed_output .= $output."\n\r\n\r";
+
+        return $composed_output;
     }
 
     /**
