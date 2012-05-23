@@ -91,9 +91,9 @@ EOF;
 
 $app['db'] = $app->share(function () use ($app)
 {
-    $chmod = FALSE;
+    $chmod = false;
     if (!file_exists($app['db.path'])) {
-        $chmod = TRUE;
+        $chmod = true;
     }
     try {
         $db = new \SQLite3($app['db.path']);
@@ -103,7 +103,7 @@ $app['db'] = $app->share(function () use ($app)
             chmod($app['db.path'], 0777);
         }
     } catch (Exception $e) {
-        return NULL;
+        return null;
     }
 
     return $db;

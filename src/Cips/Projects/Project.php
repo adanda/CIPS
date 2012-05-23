@@ -314,14 +314,14 @@ abstract class Project
             );
             $stmt->bindValue(':slug', $this->getSlug(), SQLITE3_TEXT);
 
-            if (FALSE !== $result = $stmt->execute()) {
-                if (FALSE !== $result = $result->fetchArray(\SQLITE3_ASSOC)) {
+            if (false !== $result = $stmt->execute()) {
+                if (false !== $result = $result->fetchArray(\SQLITE3_ASSOC)) {
                     return $result;
                 }
             }
         }
 
-        return FALSE;
+        return false;
     }
 
     /**
@@ -346,7 +346,7 @@ abstract class Project
             $stmt->bindValue(':offset', $offset, SQLITE3_TEXT);
             $stmt->bindValue(':num', $num_of_builds, SQLITE3_TEXT);
 
-            if (FALSE !== $result = $stmt->execute()) {
+            if (false !== $result = $stmt->execute()) {
                 while ($build = $result->fetchArray(\SQLITE3_ASSOC)) {
                     $builds[] = $build;
                 }
@@ -378,7 +378,7 @@ abstract class Project
         $failures_data = '[';
         $errors_data = '[';
 
-        if (FALSE !== $result = $stmt->execute()) {
+        if (false !== $result = $stmt->execute()) {
             while ($row = $result->fetchArray(\SQLITE3_ASSOC)) {
                 $tests_data .= '['.$row['build'].','.$row['tests'].'],';
                 $assertions_data .= '['.$row['build'].','.$row['assertions'].'],';
@@ -415,7 +415,7 @@ abstract class Project
 
         $data = '[[';
 
-        if (FALSE !== $result = $stmt->execute()) {
+        if (false !== $result = $stmt->execute()) {
             while ($row = $result->fetchArray(\SQLITE3_ASSOC)) {
                 $data .= '['.$row['build'].',';
                 $data .= ($row['coveredelements']) / ($row['elements'] / 100);
@@ -446,7 +446,7 @@ abstract class Project
 
         $data = '[[';
 
-        if (FALSE !== $result = $stmt->execute()) {
+        if (false !== $result = $stmt->execute()) {
             while ($row = $result->fetchArray(\SQLITE3_ASSOC)) {
                 $data .= '['.$row['build'].','.$row['errors'].'],';
             }
@@ -464,7 +464,7 @@ abstract class Project
      */
     public function build($app)
     {
-        $success = TRUE;
+        $success = true;
         $output  = '';
 
         foreach ($this->getPreBuildCommands() as $cmd) {
@@ -482,7 +482,7 @@ abstract class Project
             );
             $process->run();
             if (!$process->isSuccessful()) {
-                $success = FALSE;
+                $success = false;
             }
             $output .= $this->generateComposedOutput(
                 $this->getTestCommand(),
@@ -518,7 +518,7 @@ abstract class Project
         $stmt->bindValue(':output', $output, SQLITE3_TEXT);
         $stmt->bindValue(':date', date('Y-m-d H:i:s'), SQLITE3_TEXT);
 
-        if (FALSE === $stmt->execute()) {
+        if (false === $stmt->execute()) {
             throw new \RuntimeException(
                 sprintf('Unable to save project "%s".', $this->getName())
             );
@@ -558,7 +558,7 @@ abstract class Project
             $stmt->bindValue(':failures', $failures, SQLITE3_INTEGER);
             $stmt->bindValue(':errors', $errors, SQLITE3_INTEGER);
 
-            if (FALSE === $stmt->execute()) {
+            if (false === $stmt->execute()) {
                 throw new \RuntimeException(
                     sprintf('Unable to save project "%s".', $this->getName())
                 );
@@ -622,7 +622,7 @@ abstract class Project
                 SQLITE3_INTEGER
             );
 
-            if (FALSE === $stmt->execute()) {
+            if (false === $stmt->execute()) {
                 throw new \RuntimeException(
                     sprintf('Unable to save project "%s".', $this->getName())
                 );
@@ -656,7 +656,7 @@ abstract class Project
             );
             $stmt->bindValue(':errors', $errors, SQLITE3_TEXT);
 
-            if (FALSE === $stmt->execute()) {
+            if (false === $stmt->execute()) {
                 throw new \RuntimeException(
                     sprintf('Unable to save project "%s".', $this->getName())
                 );

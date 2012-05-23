@@ -222,7 +222,7 @@ EOF
         // Delete builds
         $stmt = $app['db']->prepare('DELETE FROM builds WHERE slug = :slug');
         $stmt->bindValue(':slug', $slug, SQLITE3_TEXT);
-        if (FALSE === $stmt->execute()) {
+        if (false === $stmt->execute()) {
             throw new \RuntimeException(
                 sprintf('Unable to delete project "%s".', $this->getName())
             );
@@ -233,7 +233,7 @@ EOF
             'DELETE FROM builds_checkstyle WHERE slug = :slug'
         );
         $stmt->bindValue(':slug', $slug, SQLITE3_TEXT);
-        if (FALSE === $stmt->execute()) {
+        if (false === $stmt->execute()) {
             throw new \RuntimeException(
                 sprintf('Unable to delete project "%s".', $this->getName())
             );
@@ -244,7 +244,7 @@ EOF
             'DELETE FROM builds_coverage WHERE slug = :slug'
         );
         $stmt->bindValue(':slug', $slug, SQLITE3_TEXT);
-        if (FALSE === $stmt->execute()) {
+        if (false === $stmt->execute()) {
             throw new \RuntimeException(
                 sprintf('Unable to delete project "%s".', $this->getName())
             );
@@ -255,7 +255,7 @@ EOF
             'DELETE FROM builds_testresult WHERE slug = :slug'
         );
         $stmt->bindValue(':slug', $slug, SQLITE3_TEXT);
-        if (FALSE === $stmt->execute()) {
+        if (false === $stmt->execute()) {
             throw new \RuntimeException(
                 sprintf('Unable to delete project "%s".', $this->getName())
             );

@@ -128,7 +128,7 @@ $app->post('/coverage/details', function(Request $request) use ($app)
     );
 
     $file = file($path);
-    if ($file === FALSE) {
+    if ($file === false) {
         return '<h1>Error reading file!</h1>';
     }
 
