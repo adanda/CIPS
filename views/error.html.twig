@@ -1,0 +1,12 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+    <br/><br/><br/>
+    Error in {{ error.getFile }} on Line {{ error.getLine }}:<br/><br/>
+    {{ error.getMessage }}
+    <br/><br/>
+    {{ error.getTraceAsString|replace({'\n':'<br/>'})|raw }}
+    {% for trace in error.getTrace %}
+        {{ trace.function }}
+    {% endfor %}
+{% endblock %}

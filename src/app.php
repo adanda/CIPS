@@ -12,10 +12,16 @@
  */
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 $app->error(function(Exception $e) use ($app)
 {
-    return $app->redirect('/');
+    return new Response(
+        $app['twig']->render('error.html.twig', array(
+            'error' => $e
+        )),
+        500
+    );
 });
 
 

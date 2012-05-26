@@ -32,6 +32,11 @@ function buildProject($project_slug)
             $('#loader_build').hide();
             $('#builds_list').children().first().after($html);
             $('#builds_list li').animate({opacity: 1}, 2000);
+        },
+        error: function($request, $error){
+            document.open();
+            document.write($request.responseText);
+            document.close();
         }
     });
 }

@@ -677,7 +677,7 @@ abstract class Project
      */
     protected function generateComposedOutput($cmd, $output)
     {
-        $composed_output = '$ '.$cmd."\n\r";
+        $composed_output = '$ '.$cmd."\n\r\n\r";
         $composed_output .= $output."\n\r\n\r";
 
         return $composed_output;
