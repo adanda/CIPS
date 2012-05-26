@@ -19,13 +19,13 @@ class GitProjectTest extends PHPUnit_Framework_TestCase
         $result = $this->getMock('Process');
         $result->expects($this->any())
             ->method('run')
-            ->will($this->returnValue(TRUE));
+            ->will($this->returnValue(true));
 
         $this->assertEquals($gitProject, $gitProject->checkout(''),
             'GitProject::checkout() returns the object itself when the project '.
             'does exist and the checkout is sucessfull');
 
-        $gitProject->setSlug(uniqid('cips', TRUE));
+        $gitProject->setSlug(uniqid('cips', true));
         $this->assertEquals($gitProject, $gitProject->checkout(sys_get_temp_dir()),
             'GitProject::checkout() returns the object itself when the project '.
             'does not exist and the checkout is sucessfull');
@@ -38,7 +38,7 @@ class GitProjectTest extends PHPUnit_Framework_TestCase
         $result = $this->getMock('Process');
         $result->expects($this->any())
             ->method('run')
-            ->will($this->returnValue(TRUE));
+            ->will($this->returnValue(true));
 
         $this->assertEquals($gitProject, $gitProject->update(''),
             'GitProject::update() returns the object itself when the project '.

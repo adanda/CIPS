@@ -13,6 +13,7 @@
 
 namespace Cips\Projects;
 
+use Cips\Build;
 use Symfony\Component\Process\Process;
 
 /**
@@ -348,7 +349,7 @@ abstract class Project
 
             if (false !== $result = $stmt->execute()) {
                 while ($build = $result->fetchArray(\SQLITE3_ASSOC)) {
-                    $builds[] = $build;
+                    $builds[] = new Build($build);
                 }
             }
         }
@@ -676,11 +677,33 @@ abstract class Project
      */
     protected function generateComposedOutput($cmd, $output)
     {
-        $composed_output = str_repeat('*', 100)."\n\r\n\r";
-        $composed_output .= '$ '.$cmd."\n\r\n\r\n\r";
+        $composed_output = '$ '.$cmd."\n\r";
         $composed_output .= $output."\n\r\n\r";
 
         return $composed_output;
+    }
+
+    /**
+     * Changes the ANSI-Colors of a CLI-Output to a HTML-String.
+     * 
+     * @param string $ansi The ANSI-String to convert
+     * 
+     * @return string A HTML-String
+     */
+    public function consoleOutputToHtml($ansi)
+    {
+        $converts = array(
+            "[30;42m"    => "<span class='green_bg'>",
+            "[30;43m"    => "<span class='yellow_bg'>",
+            "[41;37m"     => "<span class='red_bg'>",
+            "[37;41m"     => "<span class='red_bg'>",
+            "[33;1m"      => "<span class='yellow_fg'>",
+            "[0m"         => "</span>",
+            "[2K"         => "",
+            "\n"          => "<br/>"
+        );
+        $html = str_replace(array_keys($converts), $converts, $ansi);
+        return $html;
     }
 
     /**

@@ -106,7 +106,7 @@ a, a:hover {
 .output {
     padding: 15px;
     margin: 0 20px;
-    line-height: 1em !important;
+    line-height: 1.2em !important;
     font-size: 1em !important;
     background-color: #000000;
     color: #ffffff;
@@ -114,6 +114,25 @@ a, a:hover {
     font-family: Monospace;
     max-height: 300px;
     overflow: auto;
+}
+
+.output .green_bg {
+    background-color: #4e9a06;
+    color: #2e3436;
+}
+
+.output .red_bg {
+    background-color: #cc0000;
+    color: #ffffff;
+}
+
+.output .yellow_fg {
+    color: #c4a000;
+}
+
+.output .yellow_bg {
+    background-color: #c4a000;
+    color: #2e3436;
 }
 
 .breadcrumb {

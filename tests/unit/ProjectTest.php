@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__.'/../../src/Cips/Projects/Project.php';
+require_once __DIR__.'/../../src/Cips/Build.php';
 require_once __DIR__.'/../stubs/DB.php';
 
 /**
@@ -87,13 +88,13 @@ class ProjectTest extends PHPUnit_Framework_TestCase
     {
         $svnProject = new Cips\Projects\SvnProject('test');
 
-        $this->assertFalse($svnProject->getLastBuild(FALSE),
+        $this->assertfalse($svnProject->getLastBuild(false),
             'SvnProject::getLastBuild() returns false when no DB is given');
 
         $result = $this->getMock('myResult');
         $result->expects($this->any())
             ->method('fetchArray')
-            ->will($this->returnValue(FALSE));
+            ->will($this->returnValue(false));
 
         $statement = $this->getMock('myStatement');
         $statement->expects($this->any())
@@ -105,7 +106,7 @@ class ProjectTest extends PHPUnit_Framework_TestCase
             ->method('prepare')
             ->will($this->returnValue($statement));
 
-        $this->assertFalse($svnProject->getLastBuild($db),
+        $this->assertfalse($svnProject->getLastBuild($db),
             'SvnProject::getLastBuild() returns false when no result is given '.
             'from the DB');
 
@@ -117,14 +118,14 @@ class ProjectTest extends PHPUnit_Framework_TestCase
         $statement = $this->getMock('myStatement');
         $statement->expects($this->any())
             ->method('execute')
-            ->will($this->returnValue(FALSE));
+            ->will($this->returnValue(false));
 
         $db = $this->getMock('myDb');
         $db->expects($this->any())
             ->method('prepare')
             ->will($this->returnValue($statement));
 
-        $this->assertFalse($svnProject->getLastBuild($db),
+        $this->assertfalse($svnProject->getLastBuild($db),
             'SvnProject::getLastBuild() returns false when the Statement returns '.
             'no Result');
 
@@ -151,13 +152,13 @@ class ProjectTest extends PHPUnit_Framework_TestCase
     {
         $svnProject = new Cips\Projects\SvnProject('test');
 
-        $this->assertEquals(array(), $svnProject->getBuilds(FALSE, 20),
+        $this->assertEquals(array(), $svnProject->getBuilds(false, 20),
             'SvnProject::getBuilds() returns an empty Array when no DB is given');
 
         $result = $this->getMock('myResult');
         $result->expects($this->any())
             ->method('fetchArray')
-            ->will($this->returnValue(FALSE));
+            ->will($this->returnValue(false));
 
         $statement = $this->getMock('myStatement');
         $statement->expects($this->any())
@@ -181,7 +182,7 @@ class ProjectTest extends PHPUnit_Framework_TestCase
         $statement = $this->getMock('myStatement');
         $statement->expects($this->any())
             ->method('execute')
-            ->will($this->returnValue(FALSE));
+            ->will($this->returnValue(false));
 
         $db = $this->getMock('myDb');
         $db->expects($this->any())
@@ -192,14 +193,33 @@ class ProjectTest extends PHPUnit_Framework_TestCase
             'SvnProject::getBuilds() returns an empty Array when the Statement '.
             'returns no Result');
 
+        $build1 = array(
+            'build'         => 1,
+            'success'       => true,
+            'build_date'    => '2010-12-12 12:12:12',
+            'output'        => 'SUCCESS'
+        );
+        $build2 = array(
+            'build'         => 2,
+            'success'       => false,
+            'build_date'    => '2010-12-13 12:12:12',
+            'output'        => 'FAILURE'
+        );
+        $build3 = array(
+            'build'         => 3,
+            'success'       => true,
+            'build_date'    => '2010-12-14 12:12:12',
+            'output'        => 'SUCCESS'
+        );
+
         $result = $this->getMock('myResult');
         $result->expects($this->any())
             ->method('fetchArray')
             ->will($this->onConsecutiveCalls(
-                'a',
-                'b',
-                'c',
-                FALSE
+                $build1,
+                $build2,
+                $build3,
+                false
             ));
 
         $statement = $this->getMock('myStatement');
@@ -212,8 +232,12 @@ class ProjectTest extends PHPUnit_Framework_TestCase
             ->method('prepare')
             ->will($this->returnValue($statement));
 
-        $this->assertEquals(array('a', 'b', 'c'), $svnProject->getBuilds($db, 20),
-            'SvnProject::getBuilds() returns the Result of the Query');
+        $this->assertEquals(array(
+                new Cips\Build($build1),
+                new Cips\Build($build2),
+                new Cips\Build($build3)
+            ), $svnProject->getBuilds($db, 20),
+            'SvnProject::getBuilds() returns the Result of the Query as Builds');
     }
 
     public function testBuild()
@@ -232,7 +256,7 @@ class ProjectTest extends PHPUnit_Framework_TestCase
                 array('build' => 6, 'errors' => 7),
                 array('build' => 7, 'errors' => 0),
                 array('build' => 8, 'errors' => 23),
-                FALSE
+                false
             ));
 
         $statement = $this->getMock('myStatement');
@@ -253,7 +277,7 @@ class ProjectTest extends PHPUnit_Framework_TestCase
 
         $result->expects($this->any())
             ->method('fetchArray')
-            ->will($this->returnValue(FALSE));
+            ->will($this->returnValue(false));
 
         $this->assertEquals('[[]]', $svnProject->getCheckstyleChartData($db, 20),
             'SvnProject::getCheckstyleChartData() returns a string without data '.
@@ -261,7 +285,7 @@ class ProjectTest extends PHPUnit_Framework_TestCase
 
         $statement->expects($this->any())
             ->method('execute')
-            ->will($this->returnValue(FALSE));
+            ->will($this->returnValue(false));
 
         $this->assertEquals('[[]]', $svnProject->getCheckstyleChartData($db, 20),
             'SvnProject::getCheckstyleChartData() returns a string without data '.
@@ -279,7 +303,7 @@ class ProjectTest extends PHPUnit_Framework_TestCase
                 array('build' => 6, 'coveredelements' => 3, 'elements' => 9),
                 array('build' => 7, 'coveredelements' => 0, 'elements' => 5),
                 array('build' => 8, 'coveredelements' => 20, 'elements' => 20),
-                FALSE
+                false
             ));
 
         $statement = $this->getMock('myStatement');
@@ -300,7 +324,7 @@ class ProjectTest extends PHPUnit_Framework_TestCase
 
         $result->expects($this->any())
             ->method('fetchArray')
-            ->will($this->returnValue(FALSE));
+            ->will($this->returnValue(false));
 
         $this->assertEquals('[[]]', $svnProject->getCoverageChartData($db, 20),
             'SvnProject::getCoverageChartData() returns a string without data '.
@@ -308,7 +332,7 @@ class ProjectTest extends PHPUnit_Framework_TestCase
 
         $statement->expects($this->any())
             ->method('execute')
-            ->will($this->returnValue(FALSE));
+            ->will($this->returnValue(false));
 
         $this->assertEquals('[[]]', $svnProject->getCoverageChartData($db, 20),
             'SvnProject::getCoverageChartData() returns a string without data '.
@@ -331,7 +355,7 @@ class ProjectTest extends PHPUnit_Framework_TestCase
                     'errors' => 2, 'failures' => 6),
                 array('build' => 8, 'tests' => 14, 'assertions' => 60,
                     'errors' => 1, 'failures' => 3),
-                FALSE
+                false
             ));
 
         $statement = $this->getMock('myStatement');
@@ -355,7 +379,7 @@ class ProjectTest extends PHPUnit_Framework_TestCase
 
         $result->expects($this->any())
             ->method('fetchArray')
-            ->will($this->returnValue(FALSE));
+            ->will($this->returnValue(false));
 
         $this->assertEquals('[[], [], [], []]',
             $svnProject->getTestresultChartData($db, 20),
@@ -364,7 +388,7 @@ class ProjectTest extends PHPUnit_Framework_TestCase
 
         $statement->expects($this->any())
             ->method('execute')
-            ->will($this->returnValue(FALSE));
+            ->will($this->returnValue(false));
 
         $this->assertEquals('[[], [], [], []]',
             $svnProject->getTestresultChartData($db, 20),
