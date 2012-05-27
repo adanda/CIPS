@@ -60,6 +60,7 @@ EOF
         $projects = array($projects[$slug]);
     }
 
+    umask(0777);
     foreach ($projects as $project) {
         $output->writeln(
             "\n".sprintf('<info>Building Project "%s"</info>', $project->getName())

@@ -166,7 +166,8 @@ $app->get('/build/{slug}', function($slug) use ($app)
 {
     $projects = require __DIR__.'/../config/projects.php';
     $project = $projects[$slug];
-    $project->build($app);
+    $project->checkout($app['build.path'])
+        ->build($app);
 
     return $app['twig']->render('builds.html.twig', array(
         'builds' => array(new Cips\Build($project->getLastBuild($app['db'])))

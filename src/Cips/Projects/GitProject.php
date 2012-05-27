@@ -65,9 +65,13 @@ class GitProject extends Project
     public function update($data_path)
     {
         if (is_dir($data_path.'/'.$this->getSlug())) {
-            $cmd = 'git pull';
+            $cmd = 'git clean --force';
             $dir = $data_path.'/'.$this->getSlug().'/source';
 
+            $process = new Process($cmd, $dir);
+            $process->run();
+
+            $cmd = 'git pull';
             $process = new Process($cmd, $dir);
             $process->run();
         }
