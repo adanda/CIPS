@@ -499,6 +499,11 @@ abstract class Project
             $output .= $this->generateComposedOutput($cmd, $process->getOutput());
         }
 
+        $process = new Process(
+            'chmod 777 *', $app['build.path'].'/'.$this->getSlug().'/reports'
+        );
+        $process->run();
+
         if (!$success) {
             $this->getNotifier()->notify($this, $output, $app);
         }
