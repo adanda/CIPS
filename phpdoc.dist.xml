@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpdoc>
+  <title><![CDATA[CIPS]]></title>
+  <parser>
+    <markers>
+      <item>TODO</item>
+      <item>FIXME</item>
+    </markers>
+  </parser>
+  <files>
+    <directory>src</directory>
+    <ignore>*Test*</ignore>
+  </files>
+</phpdoc>

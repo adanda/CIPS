@@ -11,5 +11,5 @@
 /data/*.db
 /data/build/*/
 /nbproject
-/docblox.dist.xml
-/phpdoc.dist.xml
+/docblox.xml
+/phpdoc.xml
