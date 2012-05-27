@@ -87,7 +87,7 @@ Because the report file in the example is generated with a relative path, there
 is a problem in cause the file does not exist. In this case it will not be
 generated, therefore you have to create it manually before the first build.
 
-### Checkstyle
+### Project Documentation
 
 You can set a link to the documentation of your project in
 ``config/projects.php``.
