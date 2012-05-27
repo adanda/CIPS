@@ -7,7 +7,8 @@ php projects. It is based on [Silex][1], a PHP micro framework.
 CIPS supports projects hosted in a Subversion or Git repository.
 
 Currently CIPS supports tests which return a non-zero exit code when tests do
-not pass as well as checkstyle results (like PHP Codesniffer).
+not pass, checkstyle results (like PHP Codesniffer), code coverage in clover
+format (as provided by PHPUnit) as well as a link to the project documentation.
 
 CIPS works with PHP 5.3.2 or later.
 
@@ -85,6 +86,20 @@ $your_project->setPostBuildCommands(array(
 Because the report file in the example is generated with a relative path, there
 is a problem in cause the file does not exist. In this case it will not be
 generated, therefore you have to create it manually before the first build.
+
+### Checkstyle
+
+You can set a link to the documentation of your project in
+``config/projects.php``.
+
+You can set the link like in the following example:
+
+```php
+<?php
+
+$your_project->setDocumentationLink('http://link/to/your/documentation');
+```
+You can create your documentation as a post build command in your project.
 
 ## License
 
