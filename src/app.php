@@ -169,6 +169,6 @@ $app->get('/build/{slug}', function($slug) use ($app)
     $project->build($app);
 
     return $app['twig']->render('builds.html.twig', array(
-        'builds' => array($project->getLastBuild($app['db']))
+        'builds' => array(new Cips\Build($project->getLastBuild($app['db'])))
     ));
 });
