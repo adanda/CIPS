@@ -201,13 +201,13 @@ a, a:hover {
 }
 
 .red {
-    background-image: url('/images/background_red_small');
+    background-image: url('/images/background_red_small.png');
     background-position: right;
     background-repeat: no-repeat;
 }
 
 .green {
-    background-image: url('/images/background_green_small');
+    background-image: url('/images/background_green_small.png');
     background-position: right;
     background-repeat: no-repeat;
 }
