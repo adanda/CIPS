@@ -64,6 +64,12 @@ abstract class Project
     private $_postBuildCommands = array();
 
     /**
+     * The Commands to execute after a successful build of the Project
+     * @var array 
+     */
+    private $_postSuccessBuildCommands = array();
+
+    /**
      * The Command to execute the Tests of the Project
      * @var string
      */
@@ -229,6 +235,31 @@ abstract class Project
     public function getPostBuildCommands()
     {
         return $this->_postBuildCommands;
+    }
+
+    /**
+     * Setter for the PostSuccessBuildCommands.
+     *
+     * @param array $commands The Commands to execute after a successful build
+     * of the Project
+     *
+     * @return Project The Object itself
+     */
+    public function setPostSuccessBuildCommands($commands)
+    {
+        $this->_postSuccessBuildCommands = $commands;
+        return $this;
+    }
+
+    /**
+     * Getter for the PostSuccessBuildCommands.
+     *
+     * @return array The Commands to execute after a successful build of
+     * the Project
+     */
+    public function getPostSuccessBuildCommands()
+    {
+        return $this->_postSuccessBuildCommands;
     }
 
     /**
@@ -457,7 +488,12 @@ abstract class Project
     }
 
     /**
-     * Function which builds the Project
+     * Function which builds the Project and runs pre- and post-build commands.
+     * The order is the following:
+     * -) pre-build-commands
+     * -) test command
+     * -) post-success-build-commands
+     * -) post-build-commands
      *
      * @param Silex\Application $app The application
      *
@@ -489,6 +525,18 @@ abstract class Project
                 $this->getTestCommand(),
                 $process->getOutput()
             );
+        }
+
+        if ($success) {
+            foreach ($this->getPostSuccessBuildCommands() as $cmd) {
+                $process = new Process(
+                    $cmd, $app['build.path'].'/'.$this->getSlug().'/source'
+                );
+                $process->run();
+                $output .= $this->generateComposedOutput(
+                    $cmd, $process->getOutput()
+                );
+            }
         }
 
         foreach ($this->getPostBuildCommands() as $cmd) {
