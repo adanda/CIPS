@@ -1,0 +1,13 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <title>New build</title>
+    </head>
+    <body>
+        <p>A new build of the Project "{{ name }}" was made.</p>
+        <br/>
+        <div style="background-color:#000000; color:#FFFFFF; font-family:Monospace; font-size:1.2em; padding:15px; white-space:nowrap;">
+            {{ output|replace({'\n':'<br/>'})|raw }}
+        </div>
+    </body>
+</html>

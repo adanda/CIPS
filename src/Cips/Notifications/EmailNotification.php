@@ -63,22 +63,40 @@ class EmailNotification extends Notification
      */
     public function notify($project, $output, $app)
     {
-        $app['mailer']->send(
-            \Swift_Message::newInstance()
+        $success = $project->getLastBuild($app['db']);
+        $mailer = $app['mailer'];
+        $message = \Swift_Message::newInstance()
             ->setFrom($this->_sender)
-            ->addTo($this->_recipients)
-            ->setSubject('[CIPS '.$project->getName().'] Tests failed')
-            ->setBody(
-                "One or more Tests of the Project ".$project->getName().
-                " failed:\n\r\n\r".$output, 'Text/PLAIN'
-            )
-            ->setBody(
-                $app['twig']->render(
-                    'mailFailure.html.twig', array(
-                        'name'      => $project->getName(),
-                        'output'    => $output)
-                ), 'Text/HTML'
-            )
-        );
+            ->addTo($this->_recipients);
+
+        if ($success) {
+            $message->setSubject('[CIPS '.$project->getName().'] new build')
+                ->setBody(
+                    "A new build of the Project ".$project->getName().
+                    " was made:\n\r\n\r".$output, 'Text/PLAIN'
+                )
+                ->setBody(
+                    $app['twig']->render(
+                        'mailSuccess.html.twig', array(
+                            'name'      => $project->getName(),
+                            'output'    => $output)
+                    ), 'Text/HTML'
+                );
+        } else {
+            $message->setSubject('[CIPS '.$project->getName().'] Tests failed')
+                ->setBody(
+                    "One or more Tests of the Project ".$project->getName().
+                    " failed:\n\r\n\r".$output, 'Text/PLAIN'
+                )
+                ->setBody(
+                    $app['twig']->render(
+                        'mailFailure.html.twig', array(
+                            'name'      => $project->getName(),
+                            'output'    => $output)
+                    ), 'Text/HTML'
+                );
+        }
+
+        $mailer->send($message);
     }
 }
