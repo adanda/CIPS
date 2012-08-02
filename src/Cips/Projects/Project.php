@@ -552,7 +552,7 @@ abstract class Project
         );
         $process->run();
 
-        if (!$success) {
+        if (!$success || $this->getNotifier()->isAlwaysSend()) {
             $this->getNotifier()->notify($this, $output, $app);
         }
 

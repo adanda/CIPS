@@ -39,13 +39,15 @@ class EmailNotification extends Notification
     /**
      * Constructor for the Class
      * 
-     * @param string $recipients The emailadresses of the recipients
-     * @param string $sender     The sender emailadress
+     * @param string  $recipients The emailadresses of the recipients
+     * @param string  $sender     The sender emailadress
+     * @param boolean $alwaysSend Always send notifications or only after failures
      * 
      * @return void
      */
-    public function __construct($recipients, $sender)
+    public function __construct($recipients, $sender, $alwaysSend = false)
     {
+        parent::__construct($alwaysSend);
         $this->_recipients = $recipients;
         $this->_sender = $sender;
     }
