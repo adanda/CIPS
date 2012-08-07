@@ -99,7 +99,23 @@ You can set the link like in the following example:
 
 $your_project->setDocumentationLink('http://link/to/your/documentation');
 ```
-You can create your documentation as a post build command in your project.
+You can create your documentation as a post success build command in your project.
+
+
+### Notifications
+
+There is only notification by email available at the moment. It can be configured
+in the ``config/projects.php`` like in the following example:
+
+```php
+<?php
+
+$your_project->setNotifier(new Cips\Notifications\EmailNotification('email1@example.com, email2@example.com', 'from-email@example.com', false));
+```
+
+The first parameter is a comma-seperated list of recipients, the second argument
+is the sender address of the email and the third parameter controls if the email
+is only send after a failure in the tests (false) or after every build (true).
 
 ## License
 

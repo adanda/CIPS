@@ -18,8 +18,13 @@
         'your post-build-command #2',
         'phpcs --report=checkstyle --report-file=../reports/checkstyle.xml ./',
     ));
+    $your_git_project->setPostSuccessBuildCommands(array(
+        'your post-success-build-command #1',
+        'your post-success-build-command #2',
+    ));
     $your_git_project->setSlug('your_project_slug');
-    $your_git_project->setNotifier(new Cips\Notifications\EmailNotification('your notification emails', 'your sender adress'));
+    // Configure Notification to send emails only after failure ($alwaysSend == false)
+    $your_git_project->setNotifier(new Cips\Notifications\EmailNotification('your notification emails', 'your sender adress', false));
     $your_git_project->setDocumentationLink('http://link/to/your/documentation');
     $projects['your_project_slug'] = $your_git_project;
 
@@ -38,7 +43,8 @@
         'phpcs --report=checkstyle --report-file=../reports/checkstyle.xml ./',
     ));
     $your_svn_project->setSlug('your_project_slug');
-    $your_svn_project->setNotifier(new Cips\Notifications\EmailNotification('your notification emails', 'your sender adress'));
+    // Configure Notification to send emails after every build ($alwaysSend == true)
+    $your_svn_project->setNotifier(new Cips\Notifications\EmailNotification('your notification emails', 'your sender adress', true));
     $your_svn_project->setDocumentationLink('http://link/to/your/documentation');
     $projects['your_project_slug'] = $your_svn_project;
 
