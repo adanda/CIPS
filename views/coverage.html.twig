@@ -32,8 +32,8 @@
         <li>
             <div class="files">{{ coverage.project.metrics.attributes.files }}</div>
             <div class="classes">{{ coverage.project.metrics.attributes.classes }}</div>
-            <div class="methods">{{ (coverage.project.metrics.attributes.coveredmethods / (coverage.project.metrics.attributes.methods / 100))|number(2) }}%</div>
-            <div class="elements">{{ (coverage.project.metrics.attributes.coveredelements / (coverage.project.metrics.attributes.elements / 100))|number(2) }}%</div>
+            <div class="methods">{{ (coverage.project.metrics.attributes.coveredmethods / (coverage.project.metrics.attributes.methods / 100))|number_format(2) }}%</div>
+            <div class="elements">{{ (coverage.project.metrics.attributes.coveredelements / (coverage.project.metrics.attributes.elements / 100))|number_format(2) }}%</div>
         </li>
         {% for package in coverage.project.package %}
             {% set prefix = loop.index %}
@@ -57,7 +57,7 @@
                     <a href="##" onclick="loadFileDetails('file_{{ prefix~'_'~loop.index }}', '{{ file.attributes.name }}', '{{ project.getSlug }}')">
                         <li class="file invisible {{ file_class }}">
                             {{ file.attributes.name|str_replace(build_path, '/') }}<br/>
-                            Coverage: {{ file_coverage|number(2) }}%
+                            Coverage: {{ file_coverage|number_format(2) }}%
                         </li>
                     </a>
                     <li id="file_{{ prefix~'_'~loop.index }}" class="hidden details"></li>
