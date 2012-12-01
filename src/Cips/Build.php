@@ -48,6 +48,11 @@ class Build
     private $_date;
 
     /**
+     *The revision of the Build. 
+     */
+    private $_revision;
+
+    /**
      * Constructor.
      *
      * @param array $build An array with the Build values
@@ -58,6 +63,7 @@ class Build
         $this->_output = $build['output'];
         $this->_success = $build['success'];
         $this->_date = $build['build_date'];
+        $this->_revision = $build['revision'];
     }
 
     /**
@@ -150,6 +156,30 @@ class Build
     public function getDate()
     {
         return $this->_date;
+    }
+
+    /**
+     * Setter for the revision of the Build.
+     * 
+     * @param string $revision The revision of the Build
+     * 
+     * @return Build The object itself
+     */
+    public function setRevision($revision)
+    {
+        $this->_revision = $revision;
+
+        return $this;
+    }
+
+    /**
+     * Getter for the revision of the Build.
+     *
+     * @return string The revision of the Build
+     */
+    public function getRevision()
+    {
+        return $this->_revision;
     }
 
     /**

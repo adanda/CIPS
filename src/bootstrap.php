@@ -81,7 +81,7 @@ CREATE TABLE IF NOT EXISTS builds_coverage (
 EOF;
 
 $app['db.migration']   = <<<EOF
-ALTER TABLE builds ADD COLUMN revision TEXT;
+ALTER TABLE builds ADD COLUMN revision;
 EOF;
 
 $app['db'] = $app->share(function () use ($app)
@@ -94,6 +94,7 @@ $app['db'] = $app->share(function () use ($app)
         $db = new \SQLite3($app['db.path']);
         $db->busyTimeout(1000);
         $db->exec($app['db.schema']);
+        $db->exec($app['db.migration']);
         if ($chmod) {
             chmod($app['db.path'], 0777);
         }

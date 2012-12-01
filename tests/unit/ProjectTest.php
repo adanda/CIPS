@@ -197,19 +197,22 @@ class ProjectTest extends PHPUnit_Framework_TestCase
             'build'         => 1,
             'success'       => true,
             'build_date'    => '2010-12-12 12:12:12',
-            'output'        => 'SUCCESS'
+            'output'        => 'SUCCESS',
+            'revision'      => '1'
         );
         $build2 = array(
             'build'         => 2,
             'success'       => false,
             'build_date'    => '2010-12-13 12:12:12',
-            'output'        => 'FAILURE'
+            'output'        => 'FAILURE',
+            'revision'      => '2'
         );
         $build3 = array(
             'build'         => 3,
             'success'       => true,
             'build_date'    => '2010-12-14 12:12:12',
-            'output'        => 'SUCCESS'
+            'output'        => 'SUCCESS',
+            'revision'      => '3'
         );
 
         $result = $this->getMock('myResult');

@@ -3,7 +3,13 @@
         <div class="project">
             <img id="image_{{ build.getNumber }}" src="/images/arrow_closed.png" />#{{ build.getNumber }}
         </div>
-        <div class="build">&nbsp;</div>
+        <div class="build">
+            {% if build.getRevision() != '' %}
+                @{{ build.getRevision|slice(0, 10) }}
+            {% else %}
+                &nbsp;
+            {% endif %}
+        </div>
         <div class="date">{{ build.getDate|date("d.m.Y H:i:s") }}</div>
     </li>
     <div id="build_{{ build.getNumber }}" class="output hidden">

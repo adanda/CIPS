@@ -559,8 +559,9 @@ abstract class Project
         $last_build = $this->getLastBuild($app['db']);
 
         $stmt = $app['db']->prepare(
-            'INSERT INTO builds (slug, build, success, output, build_date) '.
-            'VALUES (:slug, :build, :success, :output, :date)'
+            'INSERT INTO builds '.
+            '(slug, build, success, output, build_date, revision) '.
+            'VALUES (:slug, :build, :success, :output, :date, :revision)'
         );
         $stmt->bindValue(':slug', $this->getSlug(), SQLITE3_TEXT);
         if ($last_build) {
@@ -571,6 +572,11 @@ abstract class Project
         $stmt->bindValue(':success', $success, SQLITE3_TEXT);
         $stmt->bindValue(':output', $output, SQLITE3_TEXT);
         $stmt->bindValue(':date', date('Y-m-d H:i:s'), SQLITE3_TEXT);
+        $stmt->bindValue(
+            ':revision',
+            $this->getCurrentRevision($app['build.path'].'/'.
+                $this->getSlug().'/source')
+        );
 
         if (false === $stmt->execute()) {
             throw new \RuntimeException(
@@ -802,4 +808,13 @@ abstract class Project
      * @return Project The Object itself
      */
     public abstract function update($data_path, $composer = '');
+
+    /**
+     * Returns the revision of the current version of the project.
+     * 
+     * @param string $path The path to the source folder
+     * 
+     * @return string The revesion 
+     */
+    protected abstract function getCurrentRevision($path);
 }

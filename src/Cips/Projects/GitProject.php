@@ -84,4 +84,19 @@ class GitProject extends Project
 
         return $this;
     }
+
+    /**
+     * Returns the revision of the current version of the project.
+     * 
+     * @param string $path The path to the source folder
+     * 
+     * @return string The revesion 
+     */
+    protected function getCurrentRevision($path)
+    {
+        $process = new Process('git rev-parse '.$this->getBranch(), $path);
+        $process->run();
+
+        return $process->getOutput();
+    }
 }
