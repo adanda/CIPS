@@ -31,10 +31,11 @@ class SvnProject extends Project
      * Checks out the Source to the data.path
      *
      * @param string $data_path The path to the build-Directory
+     * @param string $composer  The path to the composer executable
      * 
      * @return SvnProject The Object itself
      */
-    public function checkout($data_path)
+    public function checkout($data_path, $composer = '')
     {
         if (!is_dir($data_path.'/'.$this->getSlug())) {
             $umask = umask(0);
@@ -48,6 +49,8 @@ class SvnProject extends Project
 
             $process = new Process($cmd);
             $process->run();
+
+            $this->runComposer($data_path, $composer);
         } else {
             return $this->update($data_path);
         }
@@ -59,16 +62,19 @@ class SvnProject extends Project
      * Updates the Source to the data.path
      *
      * @param string $data_path The path to the build-Directory
+     * @param string $composer  The path to the composer executable
      * 
      * @return SvnProject The Object itself
      */
-    public function update($data_path)
+    public function update($data_path, $composer = '')
     {
         if (is_dir($data_path.'/'.$this->getSlug())) {
             $cmd = 'svn up '.$data_path.'/'.$this->getSlug().'/source';
 
             $process = new Process($cmd);
             $process->run();
+
+            $this->runComposer($data_path, $composer);
         }
 
         return $this;
