@@ -13,3 +13,5 @@
 /nbproject
 /docblox.xml
 /phpdoc.xml
+/composer.lock
+/vendor

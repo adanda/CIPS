@@ -1,13 +1,15 @@
 <?php
 
-require_once __DIR__ . '/../../vendor/silex.phar';
+require_once __DIR__.'/../../vendor/autoload.php';
+
+use Silex\WebTestCase;
 
 /**
  * Functional Tests for Cips
  *
  * @author Alfred Danda
  */
-class FunctionalTest extends Silex\WebTestCase
+class FunctionalTest extends WebTestCase
 {
 
     public function createApplication()

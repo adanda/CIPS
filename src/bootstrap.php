@@ -11,29 +11,18 @@
  * @link     Project
  */
 
-require_once __DIR__.'/../vendor/silex.phar';
+require_once __DIR__.'/../vendor/autoload.php';
+require_once __DIR__.'/twig_extensions.php';
 
 // create new Application
 $app = new Silex\Application();
 
-// register Namespaces
-$app['autoloader']->registerNamespaces(
-    array(
-        'Cips'      => __DIR__,
-        'Symfony'   => __DIR__.'/../vendor'
-    )
-);
+$app->register(new Silex\Provider\TwigServiceProvider(), array(
+    'twig.path' => __DIR__.'/../views',
+));
+$app['twig']->addFilter('str_replace', new Twig_Filter_Function('twig_str_replace'));
 
-// register Extensions for the Application
-$app->register(
-    new Silex\Extension\TwigExtension(), array(
-        'twig.path' => __DIR__.'/../views',
-        'twig.class_path' => __DIR__.'/../vendor/twig/lib',
-    )
-);
-
-$app['swiftmailer.class_path'] = __DIR__.'/../vendor/swift/lib/classes';
-$app->register(new Silex\Extension\SwiftmailerExtension(), array());
+$app->register(new Silex\Provider\SwiftmailerServiceProvider(), array());
 
 $app['data.path']   = realpath(__DIR__.'/../data');
 $app['build.path']  = $app['data.path'].'/build';
@@ -42,6 +31,7 @@ $app['db.path']     = $app->share(function ($app)
 {
     return $app['data.path'].'/cips.db';
 });
+
 $app['db.schema']   = <<<EOF
 CREATE TABLE IF NOT EXISTS builds (
     slug        TEXT,
@@ -87,6 +77,10 @@ CREATE TABLE IF NOT EXISTS builds_coverage (
     coveredelements     INT,
     PRIMARY KEY (slug, build)
 );
+EOF;
+
+$app['db.migration']   = <<<EOF
+ALTER TABLE builds ADD COLUMN revision TEXT;
 EOF;
 
 $app['db'] = $app->share(function () use ($app)
