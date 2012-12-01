@@ -166,7 +166,7 @@ $app->get('/build/{slug}', function($slug) use ($app)
 {
     $projects = require __DIR__.'/../config/projects.php';
     $project = $projects[$slug];
-    $project->checkout($app['build.path'])
+    $project->checkout($app['build.path'], $app['config']['composer'])
         ->build($app);
 
     return $app['twig']->render('builds.html.twig', array(

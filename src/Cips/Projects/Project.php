@@ -760,20 +760,46 @@ abstract class Project
     }
 
     /**
+     * Installs or updates dependencies through composer if a composer.json
+     * file is present in the root of the project.
+     * 
+     * @param string $data_path The path to the root of the Source Code
+     * @param string $composer  The path to the composer executeable
+     * 
+     * @return void 
+     */
+    public function runComposer($data_path, $composer)
+    {
+        if ($composer != '') {
+            $source_path = $data_path.'/'.$this->getSlug().'/source';
+            if (file_exists($source_path.'/composer.json')) {
+                if (file_exists($source_path.'/composer.lock')) {
+                    $process = new Process($composer.' update', $source_path);
+                } else {
+                    $process = new Process($composer.' install', $source_path);
+                }
+                $process->run();
+            }
+        }
+    }
+
+    /**
      * Function which checks out the Source Code to the given path
      *
      * @param string $data_path The path to the root of the Source Code
+     * @param string $composer  The path to the composer executable
      *
      * @return Project The Object itself
      */
-    public abstract function checkout($data_path);
+    public abstract function checkout($data_path, $composer = '');
 
     /**
      * Function which updates the Source Code on the given path
      *
      * @param string $data_path The path to the root of the Source Code
+     * @param string $composer  The path to the composer executable
      *
      * @return Project The Object itself
      */
-    public abstract function update($data_path);
+    public abstract function update($data_path, $composer = '');
 }

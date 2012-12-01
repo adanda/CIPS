@@ -64,7 +64,7 @@ EOF
         $output->writeln(
             "\n".sprintf('<info>Building Project "%s"</info>', $project->getName())
         );
-        $project->checkout($app['build.path'])
+        $project->checkout($app['build.path'], $config['composer'])
             ->build($app);
         $output->writeln(
             sprintf(
@@ -107,7 +107,7 @@ EOF
 
     $project = $projects[$slug];
 
-    $project->checkout($app['build.path']);
+    $project->checkout($app['build.path'], $config['composer']);
 
     $output->write("\n<info>Finished check out</info>\n");
 });
@@ -153,7 +153,7 @@ EOF
         $output->writeln(
             "\n".sprintf('<info>Updating Project "%s"</info>', $project->getName())
         );
-        $project->update($app['build.path']);
+        $project->update($app['build.path'], $config['composer']);
         $output->writeln(
             sprintf(
                 '<info>Finished updating Project "%s"</info>',

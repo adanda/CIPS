@@ -14,11 +14,24 @@ CIPS works with PHP 5.3.2 or later.
 
 ## Installation
 
-To install CIPS simply download the source, configure a vhost for the 
-web-directory and set up your projects under ``config/projects.php``. A
+To install CIPS download the source and run
+
+```shell
+composer install
+```
+
+in the root folder of the source to get all dependencies through
+[Composer][2]. Then configure a vhost for the 
+web directory and set up your projects under ``config/projects.php``. A
 sample file is available under ``config/projects.php_sample``.
 You have to add a config file under ``config/config.php`` too, a sample is
 available under ``config/config.php_sample``.
+
+If you use [Composer][2] for managing your dependencies, CIPS automatically
+installs and updates your dependencies when a project is build. To use this
+feature, you have to set the path to your composer installation in the
+``config/config.php`` file like in the example under
+``config/config.php_sample``.
 
 ## Usage
 
@@ -122,3 +135,4 @@ is only send after a failure in the tests (false) or after every build (true).
 CIPS is licensed under the MIT license.
 
 [1]: http://silex-project.org
+[2]: http://getcomposer.org/

@@ -31,10 +31,11 @@ class GitProject extends Project
      * Checks out the Source to the data.path
      *
      * @param string $data_path The path to the build-Directory
+     * @param string $composer  The path to the composer executable
      * 
      * @return GitProject The Object itself
      */
-    public function checkout($data_path)
+    public function checkout($data_path, $composer = '')
     {
         if (!is_dir($data_path.'/'.$this->getSlug())) {
             $umask = umask(0);
@@ -48,8 +49,10 @@ class GitProject extends Project
 
             $process = new Process($cmd);
             $process->run();
+
+            $this->runComposer($data_path, $composer);
         } else {
-            return $this->update($data_path);
+            return $this->update($data_path, $composer);
         }
 
         return $this;
@@ -59,10 +62,11 @@ class GitProject extends Project
      * Updates the Source to the data.path
      *
      * @param string $data_path The path to the build-Directory
+     * @param string $composer  The path to the composer executable
      * 
      * @return GitProject The Object itself
      */
-    public function update($data_path)
+    public function update($data_path, $composer = '')
     {
         if (is_dir($data_path.'/'.$this->getSlug())) {
             $cmd = 'git clean --force';
@@ -74,6 +78,8 @@ class GitProject extends Project
             $cmd = 'git pull';
             $process = new Process($cmd, $dir);
             $process->run();
+
+            $this->runComposer($data_path, $composer);
         }
 
         return $this;

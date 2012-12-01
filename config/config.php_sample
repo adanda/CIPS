@@ -1,4 +1,6 @@
 <?php
-    $config = array();
+    $config = array(
+        'composer'  => '/path/to/your/composer.phar'
+    );
 
     return $config;

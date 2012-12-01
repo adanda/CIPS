@@ -24,6 +24,7 @@ $app['twig']->addFilter('str_replace', new Twig_Filter_Function('twig_str_replac
 
 $app->register(new Silex\Provider\SwiftmailerServiceProvider(), array());
 
+$app['config'] = require __DIR__.'/../config/config.php';
 $app['data.path']   = realpath(__DIR__.'/../data');
 $app['build.path']  = $app['data.path'].'/build';
 
