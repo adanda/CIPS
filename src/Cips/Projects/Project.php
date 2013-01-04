@@ -784,7 +784,8 @@ abstract class Project
                 } else {
                     $process = new Process($composer.' install', $source_path);
                 }
-                $process->run();
+                $process->setTimeout(null)
+                    ->run();
             }
         }
     }
