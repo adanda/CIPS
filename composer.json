@@ -4,7 +4,7 @@
         "silex/silex": "1.0.x-dev",
         "twig/twig": ">=1.8,<2.0-dev",
         "twig/extensions": "1.0.x-dev",
-        "swiftmailer/swiftmailer": "4.3.x-dev",
+        "swiftmailer/swiftmailer": "4.3.x",
         "symfony/console": "2.2.x-dev",
         "symfony/process": "2.2.x-dev",
         "symfony/browser-kit": "2.2.x-dev",
